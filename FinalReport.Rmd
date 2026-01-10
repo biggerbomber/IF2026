@@ -1,0 +1,40 @@
+---
+title: "Plane Crash Analysis: There exist such a thing as a safest seat?"
+subtitle: "Inferential Statistics 2025/2026"
+author: "Barbato Alberto Naldoni Martina"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document: 
+    toc: true
+    fig_height: 6
+    number_sections: true
+editor_options: 
+  markdown: 
+    wrap: 80
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+Some random text....
+
+
+# Data Description
+
+This is an example of r-chuch. You can instrt the R code, Knit-it and your report
+is compiled in pdf.
+
+```{r}
+x <- rnorm(1000)
+hist(x)
+```
+
+# Analysis
+
+# Results 
+
+# Conclusions
