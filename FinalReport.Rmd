@@ -20,6 +20,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
+
+```{r load data}
+
+data <- read.csv("Aerei_Final.csv")
+
+str(data)
+summary(data)
+
+```
 Some random text....
 
 
