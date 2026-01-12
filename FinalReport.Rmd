@@ -333,7 +333,39 @@ boxplot(data$X2.half.mortality.rate ~ data$HasFire,
         ylab = "Mortality Rate",
         col = c("lightgreen", "darkgreen")) 
 
-        
+```
+
+
+
+```{r}
+# now we wnar to study the correlation between the different sections mortality rates
+correlation_matrix <- data.frame(
+  Front_Third = data$X1.third.mortality.rate,
+  Middle_Third = data$X2.third.mortality.rate,
+  Rear_Third = data$X3.third.mortality.rate,
+  Front_Half = data$X1.half.mortality.rate,
+  Rear_Half = data$X2.half.mortality.rate
+)
+correlation_results <- cor(correlation_matrix, use = "complete.obs")
+correlation_results
+
+## cor plot
+library(corrplot)
+corrplot(correlation_results, method = "ellipse", type = "upper", tl.col = "black", tl.srt = 45)
+
+## now study the correlation between the other variables and the total mortality rate
+correlation_matrix_2 <- data.frame(
+  Total_Mortality_Rate = data$Total.mortality.rate,
+  PhaseOfFlight = as.numeric(as.factor(data$PhaseOfFlight)),
+  Time = as.numeric(as.factor(data$Time)),
+  Place = as.numeric(as.factor(data$Place)),
+  HasFire = as.numeric(as.factor(data$HasFire))
+)
+correlation_results_2 <- cor(correlation_matrix_2, use = "complete.obs")
+correlation_results_2
+
+corrplot(correlation_results_2, method = "ellipse", type = "upper", tl.col = "black", tl.srt = 45)
+
 
 
 ```
