@@ -146,8 +146,15 @@ mortality_data <- data.frame(
   Section = rep(c("Front Third", "Middle Third", "Rear Third"), each = nrow(data)),
   MortalityRate = c(data$X1.third.mortality.rate, data$X2.third.mortality.rate, data$X3.third.mortality.rate)
 )
+mortality_data$Section <- as.factor(mortality_data$Section)
+
 anova_result <- aov(MortalityRate ~ Section, data = mortality_data)
 summary(anova_result)
+
+library(multcomp)
+
+test_result <- glht(anova_result, linfct = mcp(Section = "Tukey"))
+summary(test_result)
 
 #half sections
 mortality_data_half <- data.frame(
@@ -163,6 +170,13 @@ kruskal_result <- kruskal.test(MortalityRate ~ Section, data = mortality_data)
 kruskal_result_half <- kruskal.test(MortalityRate ~ Section, data = mortality_data_half)
 kruskal_result
 kruskal_result_half
+
+#oneway test
+
+oneway_result <- oneway.test(MortalityRate ~ Section, data = mortality_data, var.equal = FALSE)
+oneway_result_half <- oneway.test(MortalityRate ~ Section, data = mortality_data_half, var.equal = FALSE)
+oneway_result
+oneway_result_half
 
 ```
 
@@ -216,11 +230,97 @@ kruskal_casualties_result_half <- kruskal.test(CasualtiesRate ~ Section, data = 
 kruskal_casualties_result
 kruskal_casualties_result_half
 
+#oneway test
+oneway_casualties_result <- oneway.test(CasualtiesRate ~ Section, data = casualties_data, var.equal = FALSE)
+oneway_casualties_result_half <- oneway.test(CasualtiesRate ~ Section, data = casualties_data_half, var.equal = FALSE)
+oneway_casualties_result
+oneway_casualties_result_half
 
 
 ```
 
 
+
+```{r}
+# t.test only the fisrts third against the rears third
+t_test_result <- t.test(data$X1.third.mortality.rate, data$X3.third.mortality.rate, var.equal = FALSE)
+t_test_result
+
+#use non-parametric test if t-test assumptions are not met
+wilcox_test_result <- wilcox.test(data$X1.third.mortality.rate, data$X3.third.mortality.rate)
+wilcox_test_result
+
+```
+
+
+
+```{r}
+# now we want to test if there is a difference in mortality rate based on the other variables
+# PhaseOfFlight, Time, Place, HasFire
+# using the total mortality rate, only deaths, do this for evwey third
+
+out <- lm(data$X1.third.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+summary(out)
+
+out_2 <- lm(data$X2.third.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+summary(out_2)
+
+out_3 <- lm(data$X3.third.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+summary(out_3)
+
+
+#plot the mortality rates based on HasFire
+boxplot(data$X1.third.mortality.rate ~ data$HasFire,
+        main = "Front Third Mortality Rate by Fire Presence",
+        xlab = "Has Fire",
+        ylab = "Mortality Rate",
+        col = c("yellow", "red"))
+
+boxplot(data$X2.third.mortality.rate ~ data$HasFire,
+        main = "Middle Third Mortality Rate by Fire Presence",
+        xlab = "Has Fire",
+        ylab = "Mortality Rate",
+        col = c("yellow", "red")) 
+
+boxplot(data$X3.third.mortality.rate ~ data$HasFire,
+        main = "Rear Third Mortality Rate by Fire Presence",
+        xlab = "Has Fire",
+        ylab = "Mortality Rate",
+        col = c("yellow", "red")) 
+
+#and full plane mortality rate
+data$Total.mortality.rate <- (data$X1.terzo.morti + data$X2.terzo.morti + data$X3.terzo.morti) / (data$X1.third.total + data$X2.third.total + data$X3.third.total)
+
+boxplot(data$Total.mortality.rate ~ data$HasFire,
+        main = "Total Mortality Rate by Fire Presence",
+        xlab = "Has Fire",
+        ylab = "Mortality Rate",
+        col = c("yellow", "red"))
+
+# now for the halves
+out_half_1 <- lm(data$X1.half.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+summary(out_half_1)
+
+out_half_2 <- lm(data$X2.half.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+summary(out_half_2)
+
+#boxplots for halves
+boxplot(data$X1.half.mortality.rate ~ data$HasFire,
+        main = "Front Half Mortality Rate by Fire Presence",
+        xlab = "Has Fire",    
+        ylab = "Mortality Rate",
+        col = c("lightgreen", "darkgreen"))
+
+boxplot(data$X2.half.mortality.rate ~ data$HasFire,
+        main = "Rear Half Mortality Rate by Fire Presence",
+        xlab = "Has Fire",
+        ylab = "Mortality Rate",
+        col = c("lightgreen", "darkgreen")) 
+
+        
+
+
+```
 # Data Description
 
 This is an example of r-chuch. You can instrt the R code, Knit-it and your report
