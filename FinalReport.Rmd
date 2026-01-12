@@ -31,6 +31,22 @@ But there are also studies that suggest that there is no safest seats on an airp
 
 So, who is right? We are going to try to answer this question using statistics.
 
+# Perspective 
+
+We are studying if the seating in an airplane has an effect on the survivability of an aircraft accident. To study this, we need to look at all aircraft accidents, then rule out the accidents where every passenger survived, and every accident in which every passenger died. This is an extremely narrow data set of accidents. Of these accidents, we gathered the seatings arrangements and survivor seating maps for 47 crashes. 
+
+If 47 crashes look like a lot, we should consider the greater perspective of air travel safety in general.
+
+https://flyfright.com/plane-crash-statistics/#tve-jump-18c020d9166
+reported these figures studying the US General aviation data between 2015 and 2020 : 
+ 
+ - $\frac{1}{260256}$ :  chance of boarding any flight and it being an accident flight
+ 
+ - $\frac{1}{6,864,250}$ : chance of being on a plane involved in an accident that results in at least 1 fatality (possible case study of this study)
+
+ - $\frac{1}{816,545,929}$ chance of you specifically, dying in a plane crash
+
+
 ```{r load data}
 
 data <- read.csv("Aerei_Final.csv")
