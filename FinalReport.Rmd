@@ -1,7 +1,7 @@
 ---
 title: "Plane Crash Analysis: There exist such a thing as a safest seat?"
 subtitle: "Inferential Statistics 2025/2026"
-author: "Barbato Alberto Naldoni Martina"
+author: "Barbato Alberto, Naldoni Martina"
 date: "`r Sys.Date()`"
 output: 
   pdf_document: 
@@ -20,6 +20,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
+The Aviation industry is one of the safest in the world. The systems that it has in place to learn lessons from accidents and make sure they never happen again is well-established and highly regarded. This has made travelling by plane the safest way to travel. 
+https://flyfright.com/plane-crash-statistics/#:~:text=Based%20on%20statistics%20from%202015,unharmed%2C%20injured%2C%20or%20killed
+
+But perhaps due to these high safety standards, when an aircraft accident happens it makes headlines all over the world. Anxious passengers fear it's going to happen to them as well and they can't help but ask themselves if there is something they could do to have a safer flight. 
+
+One of the most frequent question that gets asked is : is there a part of the plane that is "safer" than other parts? Can the seating location make a difference in an accident? 
+There are many articles where experts in the field give their opinions, and most answer that "yes, there are areas that give a higher chance of survival in case of an aircraft accident". 
+But there are also studies that suggest that there is no safest seats on an airplane. 
+
+So, who is right? We are going to try to answer this question using statistics.
 
 ```{r load data}
 
