@@ -1,4 +1,4 @@
-NumVolo,1-terzo-lievi,1-terzo-gravi,1-terzo-morti,2-terzo-lievi,2-terzo-gravi,2-terzo-morti,3-terzo-lievi,3-terzo-gravi,2-terzo-morti,1-meta-lievi,1-meta-gravi,1-meta-morti,2-meta-lievi,2-meta-gravi,2-meta-morti,fonte ,PhaseOfFlight,Time,Place,HasFire
+NumVolo,1-terzo-lievi,1-terzo-gravi,1-terzo-morti,2-terzo-lievi,2-terzo-gravi,2-terzo-morti,3-terzo-lievi,3-terzo-gravi,3-terzo-morti,1-meta-lievi,1-meta-gravi,1-meta-morti,2-meta-lievi,2-meta-gravi,2-meta-morti,fonte ,PhaseOfFlight,Time,Place,HasFire
 6,17,2,15,1,15,64,26,17,0,17,3,41,26,31,34,W,Takeoff,Night,Airport ,Fire
 28,36,0,0,30,0,16,10,0,36,56,0,8,20,0,44,W,Takeoff,Day,Outside,Fire
 92,0,11,22,4,30,13,0,27,11,32,0,34,39,0,13,W,Landing,Night,Outside,Fire
