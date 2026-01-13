@@ -31,6 +31,22 @@ But there are also studies that suggest that there is no safest seats on an airp
 
 So, who is right? We are going to try to answer this question using statistics.
 
+# Vocabulary
+
+Before starting the analysis, the meaning of some terms must be clarified 
+
+ - Flight : A flight a trip made by an aircraft that connects two airports. It is identified by a number. (Example : AirFrance 225 is the name of the regular service from New Deli to Paris ) 
+ 
+ - Accident : An Accident is an occurrence where a person is fatally or seriously injured, the aircraft sustains significant structural damage, or the aircraft goes missing.
+ 
+ - Incident : An incident is a dangerous situation where no one is seriously hurt and the plane isn't badly damaged.
+ 
+ - Crash : A crash is a type of accident where an aircraft strikes the ground, water, or an obstacle with enough force to cause severe damage or total destruction.
+ 
+ - Accident flight : when a serious accident happens on a flight, usually the companies save the flight number to refer to that flight, and change the flight number for new flights. (Example : Air France 447 was the name of the connection from Rio to Paris, after the 2009 accident the flight became Air France 445)
+ 
+ - Serious injury : Any injury requiring more than 48 hours of hospitalization or involving broken bones (other than fingers/toes)
+
 # Perspective 
 
 We are studying if the seating in an airplane has an effect on the survivability of an aircraft accident. To study this, we need to look at all aircraft accidents, then rule out the accidents where every passenger survived, and every accident in which every passenger died. This is an extremely narrow data set of accidents. Of these accidents, we gathered the seatings arrangements and survivor seating maps for 47 crashes. 
@@ -45,6 +61,10 @@ reported these figures studying the US General aviation data between 2015 and 20
  - $\frac{1}{6,864,250}$ : chance of being on a plane involved in an accident that results in at least 1 fatality (possible case study of this study)
 
  - $\frac{1}{816,545,929}$ chance of you specifically, dying in a plane crash
+ 
+
+
+ 
 
 
 ```{r load data}
