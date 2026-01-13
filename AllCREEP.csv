@@ -1,0 +1,48 @@
+Airline,NumVolo,1-terzo-lievi,1-terzo-gravi,1-terzo-morti,2-terzo-lievi,2-terzo-gravi,2-terzo-morti,3-terzo-lievi,3-terzo-gravi,3-terzo-morti,1-meta-lievi,1-meta-gravi,1-meta-morti,2-meta-lievi,2-meta-gravi,2-meta-morti,fonte ,PhaseOfFlight,Time,Place,HasFire,Crushed_fuselage,Restraint_intact,Environment,Energy_absorption
+Singapore Airlines,6,17,2,15,1,15,64,26,17,0,17,3,41,26,31,34,W,Takeoff,Night,Airport ,Fire,1,0,dangerous,nogear
+British Airtours,28,36,0,0,30,0,16,10,0,36,56,0,8,20,0,44,W,Takeoff,Day,Outside,Fire,1,0,dangerous,nogear
+British Midland,92,0,11,22,4,30,13,0,27,11,32,0,34,39,0,13,W,Landing,Night,Outside,Fire,1,0,dangerous,gear
+China Airlines,120,0,0,0,5,0,8,5,0,21,3,0,6,7,0,23,W,Landing,Day,Airport ,Fire,1,1,clear,nogear
+Japan Air Lines,123,0,0,136,0,0,214,36,0,109,0,0,226,4,0,225,W,Takeoff,Night,Outside,Fire,1,0,dangerous,nogear
+Air China,129,4,0,14,5,0,60,24,0,43,7,0,23,26,0,90,W,Landing,Day,Outside,Fire,1,0,dangerous,nogear
+China Airlines,140,0,0,18,7,0,139,0,0,91,7,0,95,0,0,145,W,Landing,Day,Airport,Fire,1,0,dangerous,gear
+Air Inter,148,0,0,16,1,0,34,8,0,30,1,0,36,7,0,46,W,Landing,Night,Outside,No-Fire,1,0,dangerous,nogear
+American Airlines,191,0,0,55,0,8,51,10,7,16,0,1,79,10,14,48,W,Takeoff,Day,Outside,Fire,1,0,clear,nogear
+TANS Perú,204,3,0,33,25,0,1,29,0,0,7,0,35,46,0,0,W,Landing,Day,Outside,Fire,1,0,dangerous,nogear
+Asiana,214,10,1,0,70,14,0,54,25,3,53,12,0,81,28,3,W,Landing,Day,Airport ,Fire,1,0,clear,gear
+Trans Asia,222,0,1,13,0,3,15,1,5,16,2,0,23,8,0,20,W,Landing,Night,Outside,Fire,1,0,dangerous,gear
+Delta,232,0,0,54,0,11,61,9,4,6,101,15,20,1,26,118,W,Landing ,Day ,Airport,Fire,1,0,dangerous,gear
+United,232,2,7,18,105,8,2,28,25,91,101,15,20,27,26,90,W,Landing,Day,Airport,Fire,1,0,dangerous,gear
+Trans Asia,235,0,0,9,2,0,22,12,0,6,0,0,21,14,0,16,W,Takeoff,Day,Outside,No-Fire,1,0,dangerous,nogear
+Southern Airlines,242,0,4,24,0,8,21,0,9,15,0,9,32,0,12,29,W,Landing,Day,Outside,Fire,1,0,dangerous,gear
+VARIG,254,7,6,0,0,15,0,0,9,12,18,0,0,19,0,12,,Landing,Day,Outside,No-Fire,1,0,dangerous,nogear
+USAir,405,7,2,2,4,4,12,0,2,11,11,5,8,0,3,17,W,Takeoff,Night,Airport,Fire,1,0,dangerous,nogear
+Kenya Airways,431,4,0,34,2,0,93,4,0,40,4,0,53,6,0,107,W,Takeoff,Day,Outside,Fire,1,0,dangerous,nogear
+Uruguayan,571,8,3,3,10,2,2,6,1,6,14,3,5,10,3,7,R,Landing,Day,Outside,No-Fire,0,0,dangerous,nogear
+China Airlines,642,62,11,1,100,23,2,81,2,0,110,34,2,134,8,1,W,Landing,Day,Airport,Fire,1,0,dangerous,gear
+Atlantic Airways,670,2,0,2,3,0,1,2,0,0,3,0,2,3,3,1,W,Landing,Day,Airport,Fire,1,1,clear,gear
+Scandinavian,751,18,9,0,70,5,0,20,4,0,60,16,0,37,7,0,FR,Takeoff,Day ,Outside,No-Fire,1,1,dangerous,nogear
+Air India Express,812,1,0,37,1,0,53,6,0,52,1,0,60,7,0,94,FR,Landing,Day,Airport ,Fire,1,0,dangerous,gear
+Guarda Indonesia,865,24,0,0,101,0,0,142,0,3,125,0,0,142,0,3,W,Takeoff,Day,Outside,Fire,1,0,dangerous,gear
+Japan Airlines,907,141,0,0,174,0,6,89,0,1,221,0,3,184,0,4,W,Landing,Day,Outside,No-Fire,0,1,dangerous,nogear
+Ethiopian,961,12,0,11,8,0,72,24,0,34,0,14,35,4,26,85,W,Landing,Day,Outside,No-Fire,1,0,dangerous,nogear
+USAir,1016,0,0,11,0,3,17,0,10,6,1,0,20,13,0,15,W,Landing,Day,Outside,Fire,1,0,dangerous,gear
+Delta,1141,34,0,0,29,2,0,27,0,9,46,0,2,38,0,10,W,Takeoff,Day,Airport,Fire,1,0,dangerous,gear
+Tuninter,1153,4,0,6,6,0,6,10,0,2,6,0,9,14,0,5,W,Landing,Day,Outside,No-Fire,1,0,dangerous,nogear
+Air Ontario,1363,2,4,13,8,4,8,17,8,0,7,6,21,20,10,0,W,Takeoff,Day,Airport,Fire,1,0,dangerous,nogear
+Southwest,1380,48,0,0,43,8,1,48,0,0,70,0,0,77,0,1,W,Takeoff,Day,Airport,No-Fire,0,1,clear,gear
+American Airlines,1420,17,16,2,28,21,6,19,4,2,32,21,2,50,20,8,W,Landing,Night,Airport ,No-Fire,1,0,dangerous,gear
+Aeroflot,1492,15,0,0,16,3,12,0,2,28,27,2,6,3,3,34,W,Takeoff,Day,Airport ,Fire,1,1,dangerous,gear
+USAir,1493,0,8,15,25,3,4,27,0,1,13,10,17,37,1,3,W,Landing,Night,Airport,Fire,1,1,dangerous,gear
+Continental,1713,2,12,7,2,9,14,20,6,3,4,18,16,21,10,9,FR,Takeoff,Day ,Airport ,Fire,1,0,dangerous,gear
+Pan Am,1736,26,0,54,30,0,159,1,0,113,35,0,155,21,0,173,,Landing,Day,Airport,Fire,1,0,dangerous,gear
+Turkish,1951,19,6,5,53,2,0,40,3,0,47,8,5,43,3,0,W,Landing,Day,Outside,No-Fire,1,0,dangerous,gear
+Bek Air,2100,9,8,6,16,11,5,32,3,0,32,0,11,46,0,0,,Takeoff,Day,Airport,No-Fire,1,0,dangerous,gear
+Western Airlines,2605,0,0,19,0,0,28,12,0,9,0,0,44,12,0,17,,Landing,Night,Airport ,Fire,1,0,dangerous,gear
+Lapa,3142,12,0,24,15,0,20,7,0,14,24,0,35,10,0,25,,Takeoff,Day,Airport ,Fire,1,0,dangerous,gear
+Crossair,3597,0,0,7,3,0,9,4,0,5,1,0,10,6,0,11,,Landing,Night,Outside,Fire,1,0,dangerous,gear
+Spanair,5022,18,0,32,0,0,55,0,0,60,18,0,67,0,0,80,FR,Takeoff,Day,Airport,Fire,1,0,dangerous,gear
+Aeroflot,6502,6,0,18,7,0,21,8,0,16,10,0,26,11,0,29,,Landing,Day,Airport ,No-Fire,1,0,dangerous,gear
+Azerbaijan,8243,0,0,19,9,0,10,22,0,3,1,0,23,30,0,9,,Landing,Day,Airport,Fire,1,0,dangerous,gear
+Aires,8250,35,9,0,21,6,2,38,9,0,46,12,1,47,12,1,W,Landing,Night,Airport,Fire,1,1,dangerous,gear
+Luxair,9642,0,0,4,0,0,6,1,0,8,0,0,6,1,0,12,W,Landing,Day,Outside,No-Fire,1,0,dangerous,gear

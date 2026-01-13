@@ -69,68 +69,51 @@ reported these figures studying the US General aviation data between 2015 and 20
 
 ```{r load data}
 
-data <- read.csv("Aerei_Final.csv")
+data <- read.csv("AllCREEP_cleaned.csv")
+# trasform the variables that are categorical into factors
+data$fonte <- as.factor(data$fonte)
+data$PhaseOfFlight <- as.factor(data$PhaseOfFlight)
+data$Time <- as.factor(data$Time)
+data$Place <- as.factor(data$Place)
+data$HasFire <- as.factor(data$HasFire)
+data$Environment <- as.factor(data$Environment)
+data$Energy_absorption <- as.factor(data$Energy_absorption)
+
+
+
+
 
 str(data)
 summary(data)
 #> data <- read.csv("Aerei_Final.csv")
-#> 
-#> str(data)
-#'data.frame':   47 obs. of  21 variables:
-# $ NumVolo         : int  6 28 92 120 123 129 140 148 191 204 ...
-# $ X1.terzo.lievi  : int  17 36 0 0 0 4 0 0 0 3 ...
-# $ X1.terzo.gravi  : int  2 0 11 0 0 0 0 0 0 0 ...
-# $ X1.terzo.morti  : int  15 0 22 0 136 14 18 16 55 33 ...
-# $ X2.terzo.lievi  : int  1 30 4 5 0 5 7 1 0 25 ...
-# $ X2.terzo.gravi  : int  15 0 30 0 0 0 0 0 8 0 ...
-# $ X2.terzo.morti  : int  64 16 13 8 214 60 139 34 51 1 ...
-# $ X3.terzo.lievi  : int  26 10 0 5 36 24 0 8 10 29 ...
-# $ X3.terzo.gravi  : int  17 0 27 0 0 0 0 0 7 0 ...
-# $ X2.terzo.morti.1: int  0 36 11 21 109 43 91 30 16 0 ...
-# $ X1.meta.lievi   : int  17 56 32 3 0 7 7 1 0 7 ...
-# $ X1.meta.gravi   : int  3 0 0 0 0 0 0 0 1 0 ...
-# $ X1.meta.morti   : int  41 8 34 6 226 23 95 36 79 35 ...
-# $ X2.meta.lievi   : int  26 20 39 7 4 26 0 7 10 46 ...
-# $ X2.meta.gravi   : int  31 0 0 0 0 0 0 0 14 0 ...
-# $ X2.meta.morti   : int  34 44 13 23 225 90 145 46 48 0 ...
-# $ fonte           : chr  "W" "W" "W" "W" ...
-# $ PhaseOfFlight   : chr  "Takeoff" "Takeoff" "Landing" "Landing" ...
-# $ Time            : chr  "Night" "Day" "Night" "Day" ...
-# $ Place           : chr  "Airport " "Outside" "Outside" "Airport " ...
-# $ HasFire         : chr  "Fire" "Fire" "Fire" "Fire" ...
-#> summary(data)
-#    NumVolo     X1.terzo.lievi   X1.terzo.gravi   X1.terzo.morti  
-# Min.   :   6   Min.   :  0.00   Min.   : 0.000   Min.   :  0.00  
-# 1st Qu.: 227   1st Qu.:  0.00   1st Qu.: 0.000   1st Qu.:  1.50  
-# Median : 812   Median :  4.00   Median : 0.000   Median : 11.00  
-# Mean   :1591   Mean   : 12.87   Mean   : 2.553   Mean   : 16.15  
-# 3rd Qu.:1603   3rd Qu.: 17.00   3rd Qu.: 4.000   3rd Qu.: 19.00  
-# Max.   :9642   Max.   :141.00   Max.   :16.000   Max.   :136.00  
-# X2.terzo.lievi   X2.terzo.gravi   X2.terzo.morti   X3.terzo.lievi 
-# Min.   :  0.00   Min.   : 0.000   Min.   :  0.00   Min.   :  0.0  
-# 1st Qu.:  1.00   1st Qu.: 0.000   1st Qu.:  2.00   1st Qu.:  3.0  
-# Median :  7.00   Median : 2.000   Median : 12.00   Median : 10.0  
-# Mean   : 22.11   Mean   : 4.638   Mean   : 28.62   Mean   : 20.4  
-# 3rd Qu.: 26.50   3rd Qu.: 8.000   3rd Qu.: 31.00   3rd Qu.: 27.0  
-# Max.   :174.00   Max.   :30.000   Max.   :214.00   Max.   :142.0  
-# X3.terzo.gravi   X2.terzo.morti.1 X1.meta.lievi    X1.meta.gravi  
-# Min.   : 0.000   Min.   :  0.00   Min.   :  0.00   Min.   : 0.00  
-# 1st Qu.: 0.000   1st Qu.:  1.50   1st Qu.:  1.50   1st Qu.: 0.00  
-# Median : 0.000   Median :  8.00   Median : 11.00   Median : 0.00  
-# Mean   : 3.872   Mean   : 19.83   Mean   : 29.23   Mean   : 4.34  
-# 3rd Qu.: 4.500   3rd Qu.: 24.50   3rd Qu.: 40.50   3rd Qu.: 7.00  
-# Max.   :27.000   Max.   :113.00   Max.   :221.00   Max.   :34.00  
-# X1.meta.morti    X2.meta.lievi    X2.meta.gravi    X2.meta.morti   
-# Min.   :  0.00   Min.   :  0.00   Min.   : 0.000   Min.   :  0.00  
-# 1st Qu.:  5.00   1st Qu.:  6.50   1st Qu.: 0.000   1st Qu.:  3.50  
-# Median : 20.00   Median : 14.00   Median : 0.000   Median : 15.00  
-# Mean   : 28.57   Mean   : 28.98   Mean   : 5.234   Mean   : 36.53  
-# 3rd Qu.: 35.00   3rd Qu.: 37.50   3rd Qu.: 7.500   3rd Qu.: 45.00  
-# Max.   :226.00   Max.   :184.00   Max.   :31.000   Max.   :225.00  
-#    fonte           PhaseOfFlight          Time              Place          
-# Length:47          Length:47          Length:47          Length:47         
-# Class :character   Class :character   Class :character   Class :character  
-# Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+## 'data.frame': 47 obs. of 26 variables:
+## $ Airline : chr "Singapore Airlines" "British Airtours" "British Midland" "China Airlines"
+## $ NumVolo : int 6 28 92 120 123 129 140 148 191 204 ...
+## $ X1.terzo.lievi : int 17 36 0 0 0 4 0 0 0 3 ...
+## $ X1.terzo.gravi : int 2 0 11 0 0 0 0 0 0 0 ...
+## $ X1.terzo.morti : int 15 0 22 0 136 14 18 16 55 33 ...
+## $ X2.terzo.lievi : int 1 30 4 5 0 5 7 1 0 25 ...
+## $ X2.terzo.gravi : int 15 0 30 0 0 0 0 0 8 0 ...
+## $ X2.terzo.morti : int 64 16 13 8 214 60 139 34 51 1 ...
+## $ X3.terzo.lievi : int 26 10 0 5 36 24 0 8 10 29 ...
+## $ X3.terzo.gravi : int 17 0 27 0 0 0 0 0 7 0 ...
+## $ X3.terzo.morti : int 0 36 11 21 109 43 91 30 16 0 ...
+## $ X1.meta.lievi : int 17 56 32 3 0 7 7 1 0 7 ...
+## $ X1.meta.gravi : int 3 0 0 0 0 0 0 0 1 0 ...
+## $ X1.meta.morti : int 41 8 34 6 226 23 95 36 79 35 ...
+## $ X2.meta.lievi : int 26 20 39 7 4 26 0 7 10 46 ...
+## $ X2.meta.gravi : int 31 0 0 0 0 0 0 0 14 0 ...
+## $ X2.meta.morti : int 34 44 13 23 225 90 145 46 48 0 ...
+## $ fonte : chr "W" "W" "W" "W" ...
+## $ PhaseOfFlight : chr "Takeoff" "Takeoff" "Landing" "Landing" ...
+## $ Time : chr "Night" "Day" "Night" "Day" ...
+2
+## $ Place : chr "Airport " "Outside" "Outside" "Airport " ...
+## $ HasFire : chr "Fire" "Fire" "Fire" "Fire" ...
+## $ Crushed_fuselage : int 1 1 1 1 1 1 1 1 1 1 ...
+## $ Restraint_intact : int 0 0 0 1 0 0 0 0 0 0 ...
+## $ Environment : chr "dangerous" "dangerous" "dangerous" "clear" ...
+## $ Energy_absorption: chr "nogear" "nogear" "gear" "nogear"
                                                                             
                     
 ```
@@ -144,6 +127,9 @@ data$X2.third.total <- data$X2.terzo.lievi + data$X2.terzo.gravi + data$X2.terzo
 data$X3.third.total <- data$X3.terzo.lievi + data$X3.terzo.gravi + data$X3.terzo.morti
 data$X1.half.total <- data$X1.meta.lievi + data$X1.meta.gravi + data$X1.meta.morti
 data$X2.half.total <- data$X2.meta.lievi + data$X2.meta.gravi + data$X2.meta.morti
+
+str(data)
+summary(data)
 
 # now make a colum of mortality rate for each section
 
@@ -182,6 +168,7 @@ mortality_data <- data.frame(
   Section = rep(c("Front Third", "Middle Third", "Rear Third"), each = nrow(data)),
   MortalityRate = c(data$X1.third.mortality.rate, data$X2.third.mortality.rate, data$X3.third.mortality.rate)
 )
+str(mortality_data)
 mortality_data$Section <- as.factor(mortality_data$Section)
 
 anova_result <- aov(MortalityRate ~ Section, data = mortality_data)
@@ -295,14 +282,25 @@ wilcox_test_result
 # PhaseOfFlight, Time, Place, HasFire
 # using the total mortality rate, only deaths, do this for evwey third
 
-out <- lm(data$X1.third.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+out <- lm(data$X1.third.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
 summary(out)
 
-out_2 <- lm(data$X2.third.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+##simpify the model susins stepwise regression
+
+out_simple <- step(out)
+summary(out_simple)
+
+out_2 <- lm(data$X2.third.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
 summary(out_2)
 
-out_3 <- lm(data$X3.third.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+out_2_simple <- step(out_2)
+summary(out_2_simple)
+
+out_3 <- lm(data$X3.third.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
 summary(out_3)
+
+out_3_simple <- step(out_3)
+summary(out_3_simple)
 
 
 #plot the mortality rates based on HasFire
@@ -334,11 +332,21 @@ boxplot(data$Total.mortality.rate ~ data$HasFire,
         col = c("yellow", "red"))
 
 # now for the halves
-out_half_1 <- lm(data$X1.half.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+out_half_1 <- lm(data$X1.half.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
 summary(out_half_1)
 
-out_half_2 <- lm(data$X2.half.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire)
+#simplify the model using stepwise regression
+out_half_1_simple <- step(out_half_1 , direction = "both", trace = 0)
+summary(out_half_1_simple)
+
+
+out_half_2 <- lm(data$X2.half.mortality.rate ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
 summary(out_half_2)
+
+#simplify the model using stepwise regression
+out_half_2_simple <- step(out_half_2 , direction = "both", trace = 0)
+summary(out_half_2_simple)
+
 
 #boxplots for halves
 boxplot(data$X1.half.mortality.rate ~ data$HasFire,
@@ -356,6 +364,48 @@ boxplot(data$X2.half.mortality.rate ~ data$HasFire,
 ```
 
 
+```{r}
+#same lm analysis but considering casualties (deaths + serious injuries)
+out_casualties <- lm(data$X1.casualties_rate_new ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
+summary(out_casualties)
+
+#simpify the model susins stepwise regression 
+out_casualties_simple <- step(out_casualties, direction = "both", trace = 0)
+summary(out_casualties_simple)
+
+out_casualties_2 <- lm(data$X2.casualties_rate_new ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
+summary(out_casualties_2)
+
+out_casualties_2_simple <- step(out_casualties_2, direction = "both", trace = 0)
+summary(out_casualties_2_simple)
+
+out_casualties_3 <- lm(data$X3.casualties_rate_new ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
+summary(out_casualties_3)
+
+out_casualties_3_simple <- step(out_casualties_3, direction = "both", trace = 0)
+summary(out_casualties_3_simple)
+
+# now for the halves
+out_casualties_half_1 <- lm(data$X1.half.casualties_rate_new ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
+summary(out_casualties_half_1)
+
+#simplify the model using stepwise regression
+out_casualties_half_1_simple <- step(out_casualties_half_1 , direction = "both", trace = 0)
+summary(out_casualties_half_1_simple)
+
+
+out_casualties_half_2 <- lm(data$X2.half.casualties_rate_new ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact)
+summary(out_casualties_half_2)
+#simplify the model using stepwise regression
+out_casualties_half_2_simple <- step(out_casualties_half_2 , direction = "both", trace = 0)
+summary(out_casualties_half_2_simple) 
+
+
+
+
+```
+
+
 
 ```{r}
 # now we wnar to study the correlation between the different sections mortality rates
@@ -365,6 +415,7 @@ correlation_matrix <- data.frame(
   Rear_Third = data$X3.third.mortality.rate,
   Front_Half = data$X1.half.mortality.rate,
   Rear_Half = data$X2.half.mortality.rate
+  
 )
 correlation_results <- cor(correlation_matrix, use = "complete.obs")
 correlation_results
@@ -379,7 +430,11 @@ correlation_matrix_2 <- data.frame(
   PhaseOfFlight = as.numeric(as.factor(data$PhaseOfFlight)),
   Time = as.numeric(as.factor(data$Time)),
   Place = as.numeric(as.factor(data$Place)),
-  HasFire = as.numeric(as.factor(data$HasFire))
+  HasFire = as.numeric(as.factor(data$HasFire)),
+  Environment = as.numeric(as.factor(data$Environment)),
+  Energy_absorption = as.numeric(as.factor(data$Energy_absorption)),
+  Crushed_fuselage = as.numeric(as.factor(data$Crushed_fuselage)),
+  Restraint_intact = as.numeric(as.factor(data$Restraint_intact))
 )
 correlation_results_2 <- cor(correlation_matrix_2, use = "complete.obs")
 correlation_results_2
