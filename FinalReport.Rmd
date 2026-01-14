@@ -714,10 +714,27 @@ for( c in colums){
        xlab = "Mortality Rate",
        col = "darkgreen",
        border = "black",
-       breaks = 10)
+       breaks = 100)
 }
 
-plot.new()
+##histogram for total mortality rate
+hist((accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead) / 
+       (accident_data$X1.third.total + accident_data$X2.third.total + accident_data$X3.third.total),
+     main = "Histogram of Total Mortality Rate",
+     xlab = "Mortality Rate",
+     col = "purple",
+     border = "black",
+     breaks = 100)
+
+# check for value ==1 or value ==0 of the total mortality rate
+accident_data$Total.mortality.rate <- (accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead) / 
+  (accident_data$X1.third.total + accident_data$X2.third.total + accident_data$X3.third.total)
+#sum(accident_data$Total.mortality.rate == 1) # 0
+#sum(accident_data$Total.mortality.rate == 0) # 1
+
+
+
+
 
 colums_half <- c("X1.half.mortality.rate","X2.half.mortality.rate")
 for( c in colums_half){
@@ -726,9 +743,39 @@ for( c in colums_half){
        xlab = "Mortality Rate",
        col = "orange",
        border = "black",
-       breaks = 10)
+       breaks = 100)
 }
 
+library(corrplot)
+
+# 1. Setup Data
+correlation_matrix <- data.frame(
+  Front_Third = accident_data$X1.third.mortality.rate,
+  Middle_Third = accident_data$X2.third.mortality.rate,
+  Rear_Third = accident_data$X3.third.mortality.rate,
+  Total_Mortality_Rate = accident_data$Total.mortality.rate
+)
+
+# 2. Create the Color Gradient Logic
+# Create a palette generator that goes from Green -> Red
+rbPal <- colorRampPalette(c("green", "red"))
+
+# Map the Total_Mortality_Rate variable to 100 bins (shades of color)
+# 'cut' divides the numeric range into intervals, returning the index (1-100)
+# We use that index to pick the specific color from rbPal
+point_colors <- rbPal(2)[as.numeric(cut(correlation_matrix$Total_Mortality_Rate, breaks = 2))]
+
+# 3. Plot
+scatterplot_matrix <- function(data) {
+  pairs(data, 
+        main = "Scatterplot Matrix of Mortality Rates",
+        pch = 19, 
+        # Pass the vector of colors we created
+        col = point_colors,
+        lower.panel = NULL) 
+}
+
+scatterplot_matrix(correlation_matrix)
 ```
 
 It seems that there is no clear distribution pattern. 
