@@ -494,7 +494,12 @@ corrplot(correlation_results_2, method = "ellipse", type = "upper", tl.col = "bl
 
 # Data Description & Analysis
 
-Firstly, let's take a look at the data gathered,in particular its structure and meaning:
+For this experiment, we found that there were no already available datasets to get the accident seating diagrams.
+We decided that we would gather the informations from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from wikipedia after checking that the source was indeed the final report of the investigation into the accident. 
+
+We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft. Not knowing if dividing into thirds or halves, we inserted both these informations in our dataset. 
+
+Let's take a look at the structure and meaning of the data we gathered:
 
 ```{r load data}
 accident_data <- read.csv("AllCREEP_cleaned_eng.csv")
@@ -532,31 +537,34 @@ str(accident_data)
 #
 ```
 
-The data consists of 47 observations (aircraft accidents) and 26 variables, that are the focus of our analysis. We want to remark that the data consists only of aircraft accidents where there were at least one survival.
+The data consists of 47 observations (aircraft accidents) and 26 variables. They are the focus of our analysis.
+
+We want to remark that the data consists only of aircraft accidents where there was at least 1 survivor and at least 1 fatality, because the final goal was to compare mortality rates. 
 
 The variables consists of:
 
-- **Airline & FlightNum** : identification of the crash, usefull to retrive more information about the accident if needed
+- **Airline & FlightNum** : identifier of the aircraft accident. Useful to retrieve more information about the accident if needed. 
 
-- **X variables** : these variables represent the number and the type of casualties in each section of the airplane. The plane is divided in two different ways : in thirds and in halves. For each section, there are three variables representing the number of minor injuries, major injuries and deaths for that section. The format is the following : `X{section}.{part}.{type of injury}`, where section is 1,2,3 for the thirds and 1,2 for the halves, part is "third" or "half", and type of injury is "minor", "major" or "dead".
+- **X variables** : these variables represent the number and the type of injury (light-none / serious / fatal) in each section of the airplane (Each third and each half). 
+The format is the following : `X{section}.{part}.{type of injury}`, where section is 1,2,3 for the thirds and 1,2 for the halves, part is "third" or "half", and type of injury is "minor", "major" or "dead".
 
-- **DataOrigin** : source of the data, [ to complete ]
+- **DataOrigin** : source of the data, either Wikipedia (W) or directly from the final report (FR) or other sources (empty).
 
-- **PhaseOfFlight** : phase of flight when the accident happened, The possible values are "takeoff" or "landing", landing includes possible emergency landings.
+- **PhaseOfFlight** : phase of flight when the accident happened, The possible values are "takeoff" or "landing", landing includes emergency landings.
 
 - **Time** : time of the day when the accident happened, possible values are "day" or "night". This is intended to signal if natural light was present or not.
-- **Place** : location where the accident happened, possible values are "airport" or "outside". "Airport" means that the accident happened on the runway or in the immediate vicinity of the airport, "outside" means that the accident happened far from any airport.
 
-- **HasFire**  : indicates if there was a fire during or after the accident, possible values are "fire" or "no-fire".
+- **Place** : location where the accident happened. Possible values are "airport" or "outside". "Airport" means that the accident happened within airport boundaries (where the airport fire rescue service arrive in less that 3 minutes), "outside" means that the accident happened outside an airport.
 
-Now we include also 4 other variables useful to determine the severity of an aircraft accident:
+- **HasFire**  : indicates if there was an uncontained fire after the crash that spread to the cabin. Possible values are "fire" or "no-fire".
 
-- **CrushedFuselage** : indicates if the fuselage was crushed during the accident, possible values are 1 (yes) or 0 (no).
-- **RestraintIntact** : indicates if the restraint system was intact, and thus effective at retain the passengers, during the accident, possible values are 1 (yes) or 0 (no).
+- **CrushedFuselage** : indicates if the fuselage was crushed (deformed with significant loss of volume) during the accident, possible values are 1 (yes) or 0 (no).
 
-- **Environment** : indicates the environmental conditions during the accident, possible values are "clear" or "dangerous".
+- **RestraintIntact** : indicates if the restraint system was intact (if the seating structure remained intact and the seat belt system functioned correctly), possible values are 1 (yes) or 0 (no).
 
-- **EnergyAbsorption** : indicates if the landing gear was developed to absorb energy during the accident, if not the airplane is considerd to have done a "belly landing".
+- **Environment** : indicates the state of the cabin after the crash (dangerous if it was determined that parts of the cabin like overhead bins failed and debris was scattered in the cabin), possible values are "clear" or "dangerous".
+
+- **EnergyAbsorption** : indicates if the landing gear was extended and if it absorbed a significant amount of impact forces before collapsing (if not the airplane either hit the ground wit the gear retracted or hit the ground nose-first or tail-first, causing the impact forces to be absorbed by the passenger cabin).
 
 
 To start the analysis, let's prepare the data by adding some useful variables, and trasform some variables into a more manageable format.
@@ -577,7 +585,9 @@ factor_cols <- c("PhaseOfFlight", "Time", "Place", "HasFire", "Environment",
 accident_data[factor_cols] <- lapply(accident_data[factor_cols], as.factor)
 ```
 
-Now we can add a new variable that will be the center of our analysis : the mortality rate for each section of the airplane. The mortality rate is defined as the number of deaths divided by the total number of passengers in that section. Note that some of this aircraft where not full, so there might be sections with very few passengers or possibly empty. Thats why we are considering rates per total passengers instead of per number of seats.
+Now we can add a new variable that will be the center of our analysis : the mortality rate for each section of the airplane. The mortality rate is defined as the number of deaths divided by the total number of passengers in the section, for each section. 
+Note that aircraft don't always fly on a full load of passengers, so there might be sections with very few passengers or possibly empty. Thats why we are considering rates per total passengers instead of per number of seats.
+
 ```{r add mortality rates}
 accident_data <- within(accident_data, {
   X1.third.mortality.rate <- X1.third.dead / X1.third.total
@@ -629,7 +639,7 @@ shapiro_results <- data.frame(
 shapiro_results
 ```
 
-All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality for all sections. This means that the mortality rates do not follow a normal distribution, let's try to plot a histogram for one of the sections to visualize an aproximately of the distribution.
+All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality for all sections. This means that the mortality rates do not follow a normal distribution, let's try to plot a histogram for one of the sections to visualize an approximation of the distribution.
 
 ```{r istrogram distribution, fig.height=4, fig.width=8}
 par(mfrow = c(1, 2))
@@ -646,15 +656,15 @@ for( c in colums){
 }
 ```
 
-There seems that there is no clear distribution pattern, but we can se that the data is more concentrated  at either ends of the mortality rate values, expecially for the front third section.
+It seems that there is no clear distribution pattern, but we can see that the data is more concentrated  at either end of the mortality rate values, especially for the front third section.
 
 ## Statistical Analysis
 
-Now that we have a better understanding of the data, we can proceed with the statistical analysis to test if there are significant differences in mortality rates between the different sections of the airplane. Also we will try to see if there is some correlation between the mortality rates and the other variables in the dataset.
+Now that we have a better understanding of the data, we can proceed with the statistical analysis to test if there are significant differences in mortality rates between the different sections of the airplane. Also, we will try to see if there is some correlation between the mortality rates and the other variables in the dataset.
 
 ### Analysis of differences in mortality rates between sections
 
-Since the distribution of the mortality rates is not normal, we will not use test that assume normality, like t-tests or ANOVA.
+Since the distribution of the mortality rates is not normal, we will not use tests that assume normality, like t-tests or ANOVA.
 For this reason, we will use the Kruskal-Wallis test, which is a non-parametric test to compare the distribution of two or more groups. The null hypothesis of the Kruskal-Wallis test is that all the populations have the same distribution.
 
 ```{r analysis of population differences}
@@ -683,13 +693,19 @@ kruskal_result_half
 [Interpretation of results to be added here, OR later in the report]
 
 ### Modeling the mortality rates
-Now we will try to fit a model to possibly discover the effect of the other variables on the mortality rates of the different sections. The focus is not specifically on prediction, but rather on trying to find other significant difference between the sections. Now the questions are:
 
-- Are there variable that significantly affect the mortality rate?
+Now we will try to fit a model to possibly discover the effect of the other variables on the mortality rates of the different sections. The focus is not specifically on prediction, but rather on trying to find a significant difference between the sections. Now the questions are:
+
+- Are there variables that significantly affect the mortality rate?
 
 - If so, do they affect differently the various sections of the airplane?
 
-We will try to fit a Generalized Linear Model (GLM) with binomial family, since the mortality rate is a proportion (number of deaths / total number of passengers). Unfortunately, for the nature of the data, the assumptions of the binomial distribution are not met, since the passenger's deaths are not independent events. To account for this, we will use the quasibinomial family, which is a more flexible version of the binomial family that allows for overdispersion and corrects the standard errors and p-values accordingly.  
+We will try to fit a Generalized Linear Model (GLM) with binomial family, since the mortality rate is a proportion (number of deaths / total number of passengers). 
+Unfortunately, for the nature of the data, the assumptions of the binomial distribution are not met, since the passenger's deaths are not independent events. 
+
+(THEY ARE IF WE COMPARE DIFFERENT FLIGHTS AND NOT DIFFERENT SECTIONS OF THE SAME FLIGHT....CAN WE DO SOMETHING WITH THIS?)
+
+To account for this, we will use the quasibinomial family, which is a more flexible version of the binomial family that allows for overdispersion and corrects the standard errors and p-values accordingly.  
 
 ```{r test glm}
 ### test glm with binomial family to see the effect of other variables on mortality rate for each section
