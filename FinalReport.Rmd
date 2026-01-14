@@ -696,105 +696,64 @@ We will try to fit a Generalized Linear Model (GLM) with binomial family, since 
 
 ## also print the varius confidence intervals for the coefficients, and trasform them into odds ratios
 glm_third_1 <- glm(cbind(accident_data$X1.third.dead, accident_data$X1.third.total - accident_data$X1.third.dead) ~ 
-                     accident_data$PhaseOfFlight + 
-                     accident_data$Time + 
-                     accident_data$Place + 
+                     #accident_data$PhaseOfFlight + 
+                     #accident_data$Time + 
+                     #accident_data$Place + 
                      accident_data$HasFire + 
                      #accident_data$Environment + 
                      accident_data$EnergyAbsorption + 
                      accident_data$CrushedFuselage + 
                      accident_data$RestraintIntact, 
                    family = quasibinomial(link = "logit"))
-
-glm_third_1_simple <-glm_third_1
-summary(glm_third_1_simple) 
-
-confint_third_1 <- confint(glm_third_1_simple)
-odds_ratios_third_1 <- exp(coef(glm_third_1_simple))
-odds_ratios_third_1_confint <- exp(confint_third_1)
-odds_ratios_third_1_confint
 
 glm_third_2 <- glm(cbind(accident_data$X2.third.dead, accident_data$X2.third.total - accident_data$X2.third.dead) ~ 
-                     accident_data$PhaseOfFlight + 
-                     accident_data$Time + 
-                     accident_data$Place + 
+                     #accident_data$PhaseOfFlight + 
+                     #accident_data$Time + 
+                     #accident_data$Place + 
                      accident_data$HasFire + 
                      #accident_data$Environment + 
                      accident_data$EnergyAbsorption + 
                      accident_data$CrushedFuselage + 
                      accident_data$RestraintIntact, 
                    family = quasibinomial(link = "logit"))
-summary(glm_third_2)
-
-
 
 glm_third_3 <- glm(cbind(accident_data$X3.third.dead, accident_data$X3.third.total - accident_data$X3.third.dead) ~ 
-                     accident_data$PhaseOfFlight + 
-                     accident_data$Time + 
-                     accident_data$Place + 
+                     #accident_data$PhaseOfFlight + 
+                     #accident_data$Time + 
+                     #accident_data$Place + 
                      accident_data$HasFire + 
                      #accident_data$Environment + 
                      accident_data$EnergyAbsorption + 
                      accident_data$CrushedFuselage + 
                      accident_data$RestraintIntact, 
                    family = quasibinomial(link = "logit"))
-summary(glm_third_3)
-
-
-
-
-glm_half_1 <- glm(cbind(accident_data$X1.half.dead, accident_data$X1.half.total - accident_data$X1.half.dead) ~ 
-                     accident_data$PhaseOfFlight + 
-                     accident_data$Time + 
-                     accident_data$Place + 
-                     accident_data$HasFire + 
-                     accident_data$Environment + 
-                     accident_data$EnergyAbsorption + 
-                     accident_data$CrushedFuselage + 
-                     accident_data$RestraintIntact, 
-                   family = quasibinomial(link = "logit"))
-summary(glm_half_1)
-
-
-glm_half_2 <- glm(cbind(accident_data$X2.half.dead, accident_data$X2.half.total - accident_data$X2.half.dead) ~ 
-                     accident_data$PhaseOfFlight + 
-                     accident_data$Time + 
-                     accident_data$Place + 
-                     accident_data$HasFire + 
-                     accident_data$Environment + 
-                     accident_data$EnergyAbsorption + 
-                     accident_data$CrushedFuselage + 
-                     accident_data$RestraintIntact, 
-                   family = quasibinomial(link = "logit"))
-summary(glm_half_2)
- 
 
 # now try to model the total mortality rate
-
 
 glm_total <- glm(cbind(accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead, 
                        accident_data$X1.third.total + accident_data$X2.third.total + accident_data$X3.third.total - 
                          (accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead)) ~ 
-                   accident_data$PhaseOfFlight + 
-                   accident_data$Time + 
-                   accident_data$Place + 
+                   #accident_data$PhaseOfFlight + 
+                   #accident_data$Time + 
+                   #accident_data$Place + 
                    accident_data$HasFire + 
-                   accident_data$Environment + 
+                   #accident_data$Environment + 
                    accident_data$EnergyAbsorption + 
                    accident_data$CrushedFuselage + 
                    accident_data$RestraintIntact, 
                  family = quasibinomial(link = "logit"))
-summary(glm_total)
-glm_total_simple <- glm_total
-summary(glm_total_simple)
-
-# now get odds ratios and confidence intervals for the total model
-confint_total <- confint(glm_total_simple)
-odds_ratios_total <- exp(coef(glm_total_simple))
-odds_ratios_total_confint <- exp(confint_total)
-odds_ratios_total_confint
 
 ```
+
+
+
+```{r glm summaries}
+summary(glm_third_1)
+summary(glm_third_2)
+summary(glm_third_3)
+summary(glm_total)
+```
+
 
 ```{r}
 x <- rnorm(1000)
