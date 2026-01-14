@@ -745,7 +745,7 @@ Now that we have a better understanding of the data, we can proceed with the sta
 
 
 Since the distribution of the mortality rates is not normal, we will not use tests that assume normality, like t-tests or ANOVA.
-For this reason, we will use the Kruskal-Wallis test, which is a non-parametric test to compare the distribution of two or more groups. The null hypothesis of the Kruskal-Wallis test is that all the populations have the same distribution.
+We will instead use the Kruskal-Wallis test, which is a non-parametric test to compare the distribution of two or more groups. The null hypothesis of the Kruskal-Wallis test is that all the populations have the same distribution.
 
 ```{r analysis of population differences}
 # Kruskal-Wallis test for differences in mortality rates between sections (only thirds)
@@ -772,7 +772,7 @@ kruskal_result_half
 
 [Interpretation of results to be added here, OR later in the report]
 
-### Modeling the mortality rates
+## Modeling the mortality rates
 
 Now we will try to fit a model to possibly discover the effect of the other variables on the mortality rates of the different sections. The focus is not specifically on prediction, but rather on trying to find a significant difference between the sections. Now the questions are:
 
@@ -781,9 +781,7 @@ Now we will try to fit a model to possibly discover the effect of the other vari
 - If so, do they affect differently the various sections of the airplane?
 
 We will try to fit a Generalized Linear Model (GLM) with binomial family, since the mortality rate is a proportion (number of deaths / total number of passengers). 
-Unfortunately, for the nature of the data, the assumptions of the binomial distribution are not met, since the passenger's deaths are not independent events. 
-
-(THEY ARE IF WE COMPARE DIFFERENT FLIGHTS AND NOT DIFFERENT SECTIONS OF THE SAME FLIGHT....CAN WE DO SOMETHING WITH THIS?)
+Unfortunately, because of the nature of the data, the assumptions of the binomial distribution are not met, since the passenger's deaths are not independent events. 
 
 To account for this, we will use the quasibinomial family, which is a more flexible version of the binomial family that allows for overdispersion and corrects the standard errors and p-values accordingly.  
 
