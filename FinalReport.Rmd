@@ -521,7 +521,7 @@ corrplot(correlation_results_2, method = "ellipse", type = "upper", tl.col = "bl
 
 ```
 
-# Data Description & Analysis
+# Data Description
 
 For this experiment, we found that there were no already available datasets to get the accident seating diagrams.
 We decided that we would gather the information from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident. 
