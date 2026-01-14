@@ -88,21 +88,23 @@ We can get a clear picture of just how rare an accident is by looking into the U
  
 ## Data Gathering Process
 
-For this experiment, we found that there weren't already available datasets to get the accident seating maps.
+For this experiment, we found that there weren't any available datasets to get the accident seating maps from.
 
-//talk about the fact that in all major accidents either all die or all survive --> wikipedia list 
+We decided that we would gather the information from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident. The final report is the result of the investigation conducted by an aviation safety board. It is an official document where the results of the investigation into the cause of the accident is reported along with many other informations pertinent to the analysis that the investigators conducted. 
 
-//not all incidents feature a map. Not all incidents where people both survived and died were crashs (11A)
-// argue that we have a significative dataset
+We examined aircraft accidents where there were more than 3 deaths, and more than 30 people overall onboard to be able to divide the aircraft into proportions and study them. Of 597 accidents that happened from 1977 to 2019, we found 111 that met this criteria. Of these, we found seat injury maps for 47 of them. This was due to the kind of information contained in the final reports. 
 
-We decided that we would gather the information from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident. 
+The final reports don't always feature a seat injury map built in a way that allows us to conduct a ststistical analysis on it. Sometimes, the map is not even present and the only information is a rough idea of the location of the survivors and deaths. This is an extract from the final report of eastern airlines flight 401 :
 
-//What are FR and that they are official ; redacted by apposite agencies - only official document 
+"Most of the survivors were located in the vicinity of the cockpit area, the mid-cabin service area, the overwing area, and the empennage section; these sections were located at the far end of the wreckage path. In contrast, most fatalities were found in the center of the crash path. Crushing injuries to the chest were the predominant causes of death."
 
-//manually counted all seats, so the data is ours. PILOTS AND FA not included as they are not passengers
+We know that 101 people died in this accident and that 75 survived, but we have no way of knowing how to assign a precise percentage to each section, so we had to discard this accident from our data sample. 
 
-We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
-//not all aircraft have the same seating arrangements, little data --> 3 and 2 
+In some cases, only the locations of the deaths were marked, thus making a statistical analysis impossible since the total number of passengers per section was unknown. 
+
+Whenever a full seat x injury map was featured in the report, we calculated by hand the total passenger counts. We intentionally left out the cabin crew from our totals, since this analysis is focused on passengers. 
+
+We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft, as all aircraft are different and can't be compared seat by seat. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
  
  
 # Data Description
