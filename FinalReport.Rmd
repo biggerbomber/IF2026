@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-The Aviation industry is one of the safest in the world. The systems that it has in place to learn lessons from accidents and make sure they never happen again is well-established and highly regarded. This has made travelling by plane the safest way to travel. 
+The Aviation industry is one of the safest in the world. The systems that it has in place to learn lessons from accidents and make sure they never happen again is well-established and highly regarded. This has made traveling by plane the safest way to travel. 
 https://flyfright.com/plane-crash-statistics/#:~:text=Based%20on%20statistics%20from%202015,unharmed%2C%20injured%2C%20or%20killed
 
 But perhaps due to these high safety standards, when an aircraft accident happens it makes headlines all over the world. Anxious passengers fear it's going to happen to them as well and they can't help but ask themselves if there is something they could do to have a safer flight. 
@@ -67,7 +67,7 @@ reported these figures studying the US General aviation data between 2015 and 20
  
 
 
-```{r load data}
+```{r}
 
 data <- read.csv("AllCREEP_cleaned.csv")
 # trasform the variables that are categorical into factors
@@ -361,6 +361,44 @@ boxplot(data$X2.half.mortality.rate ~ data$HasFire,
         ylab = "Mortality Rate",
         col = c("lightgreen", "darkgreen")) 
 
+
+
+############################################################
+
+#same analysis but using glm with binomial family
+
+out_glm <- glm(cbind(data$X1.terzo.morti, data$X1.third.total - data$X1.terzo.morti) ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact, family = binomial)
+
+summary(out_glm)
+out_glm_simple <- step(out_glm, direction = "both", trace = 0)
+summary(out_glm_simple)
+
+out_glm_2 <- glm(cbind(data$X2.terzo.morti, data$X2.third.total - data$X2.terzo.morti) ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact, family = binomial)
+
+summary(out_glm_2)
+out_glm_2_simple <- step(out_glm_2, direction = "both", trace = 0)
+summary(out_glm_2_simple)
+
+out_glm_3 <- glm(cbind(data$X3.terzo.morti, data$X3.third.total - data$X3.terzo.morti) ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact, family = binomial)
+
+summary(out_glm_3)
+out_glm_3_simple <- step(out_glm_3, direction = "both", trace = 0)
+summary(out_glm_3_simple)
+
+# now for the halves
+out_glm_half_1 <- glm(cbind(data$X1.meta.morti, data$X1.half.total - data$X1.meta.morti) ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact, family = binomial)
+summary(out_glm_half_1)
+
+out_glm_half_1_simple <- step(out_glm_half_1 , direction = "both", trace = 0)
+summary(out_glm_half_1_simple)
+
+out_glm_half_2 <- glm(cbind(data$X2.meta.morti, data$X2.half.total - data$X2.meta.morti) ~ data$PhaseOfFlight + data$Time + data$Place + data$HasFire + data$Environment + data$Energy_absorption + data$Crushed_fuselage + data$Restraint_intact, family = binomial)
+summary(out_glm_half_2)
+out_glm_half_2_simple <- step(out_glm_half_2 , direction = "both", trace = 0)
+summary(out_glm_half_2_simple)
+
+
+
 ```
 
 
@@ -444,10 +482,310 @@ corrplot(correlation_results_2, method = "ellipse", type = "upper", tl.col = "bl
 
 
 ```
-# Data Description
 
-This is an example of r-chuch. You can instrt the R code, Knit-it and your report
-is compiled in pdf.
+# Data Description & Analysis
+
+Firstly, let's take a look at the data gathered,in particular its structure and meaning:
+
+```{r load data}
+accident_data <- read.csv("AllCREEP_cleaned_eng.csv")
+str(accident_data)
+#
+#> str(accident_data)
+#'data.frame':   47 obs. of  26 variables:
+# $ Airline          : chr  "singapore airlines" "british airtours" "british midland" "china airlines" ...
+# $ FlightNum        : int  6 28 92 120 123 129 140 148 191 204 ...
+# $ X1.third.minor   : int  17 36 0 0 0 4 0 0 0 3 ...
+# $ X1.third.major   : int  2 0 11 0 0 0 0 0 0 0 ...
+# $ X1.third.dead    : int  15 0 22 0 136 14 18 16 55 33 ...
+# $ X2.third.minor   : int  1 30 4 5 0 5 7 1 0 25 ...
+# $ X2.third.major   : int  15 0 30 0 0 0 0 0 8 0 ...
+# $ X2.third.dead    : int  64 16 13 8 214 60 139 34 51 1 ...
+# $ X3.third.minor   : int  26 10 0 5 36 24 0 8 10 29 ...
+# $ X3.third.major   : int  17 0 27 0 0 0 0 0 7 0 ...
+# $ X3.third.dead    : int  0 36 11 21 109 43 91 30 16 0 ...
+# $ X1.half.minor    : int  17 56 32 3 0 7 7 1 0 7 ...
+# $ X1.half.major    : int  3 0 0 0 0 0 0 0 1 0 ...
+# $ X1.half.dead     : int  41 8 34 6 226 23 95 36 79 35 ...
+# $ X2.half.minor    : int  26 20 39 7 4 26 0 7 10 46 ...
+# $ X2.half.major    : int  31 0 0 0 0 0 0 0 14 0 ...
+# $ X2.half.dead     : int  34 44 13 23 225 90 145 46 48 0 ...
+# $ DataOrigin       : chr  "w" "w" "w" "w" ...
+# $ PhaseOfFlight    : chr  "takeoff" "takeoff" "landing" "landing" ...
+# $ Time             : chr  "night" "day" "night" "day" ...
+# $ Place            : chr  "airport" "outside" "outside" "airport" ...
+# $ HasFire          : chr  "fire" "fire" "fire" "fire" ...
+# $ CrushedFuselage : int  1 1 1 1 1 1 1 1 1 1 ...
+# $ RestraintIntact : int  0 0 0 1 0 0 0 0 0 0 ...
+# $ Environment      : chr  "dangerous" "dangerous" "dangerous" "clear" ...
+# $ EnergyAbsorption: chr  "nogear" "nogear" "gear" "nogear" ...
+#> 
+#
+```
+
+The data consists of 47 observations (aircraft accidents) and 26 variables, that are the focus of our analysis. We want to remark that the data consists only of aircraft accidents where there were at least one survival.
+
+The variables consists of:
+
+- **Airline & FlightNum** : identification of the crash, usefull to retrive more information about the accident if needed
+
+- **X variables** : these variables represent the number and the type of casualties in each section of the airplane. The plane is divided in two different ways : in thirds and in halves. For each section, there are three variables representing the number of minor injuries, major injuries and deaths for that section. The format is the following : `X{section}.{part}.{type of injury}`, where section is 1,2,3 for the thirds and 1,2 for the halves, part is "third" or "half", and type of injury is "minor", "major" or "dead".
+
+- **DataOrigin** : source of the data, [ to complete ]
+
+- **PhaseOfFlight** : phase of flight when the accident happened, The possible values are "takeoff" or "landing", landing includes possible emergency landings.
+
+- **Time** : time of the day when the accident happened, possible values are "day" or "night". This is intended to signal if natural light was present or not.
+- **Place** : location where the accident happened, possible values are "airport" or "outside". "Airport" means that the accident happened on the runway or in the immediate vicinity of the airport, "outside" means that the accident happened far from any airport.
+
+- **HasFire**  : indicates if there was a fire during or after the accident, possible values are "fire" or "no-fire".
+
+Now we include also 4 other variables useful to determine the severity of an aircraft accident:
+
+- **CrushedFuselage** : indicates if the fuselage was crushed during the accident, possible values are 1 (yes) or 0 (no).
+- **RestraintIntact** : indicates if the restraint system was intact, and thus effective at retain the passengers, during the accident, possible values are 1 (yes) or 0 (no).
+
+- **Environment** : indicates the environmental conditions during the accident, possible values are "clear" or "dangerous".
+
+- **EnergyAbsorption** : indicates if the landing gear was developed to absorb energy during the accident, if not the airplane is considerd to have done a "belly landing".
+
+
+To start the analysis, let's prepare the data by adding some useful variables, and trasform some variables into a more manageable format.
+```{r data preparation}
+# add a colum of # of passengers for each airplain section
+accident_data <- within(accident_data, {
+  X2.half.total  <- X2.half.minor  + X2.half.major  + X2.half.dead
+  X1.half.total  <- X1.half.minor  + X1.half.major  + X1.half.dead
+  X3.third.total <- X3.third.minor + X3.third.major + X3.third.dead
+  X2.third.total <- X2.third.minor + X2.third.major + X2.third.dead
+  X1.third.total <- X1.third.minor + X1.third.major + X1.third.dead
+})
+
+# now we transform the variables that are categorical into factors
+factor_cols <- c("PhaseOfFlight", "Time", "Place", "HasFire", "Environment", 
+                 "EnergyAbsorption", "CrushedFuselage", "RestraintIntact")
+
+accident_data[factor_cols] <- lapply(accident_data[factor_cols], as.factor)
+```
+
+Now we can add a new variable that will be the center of our analysis : the mortality rate for each section of the airplane. The mortality rate is defined as the number of deaths divided by the total number of passengers in that section. Note that some of this aircraft where not full, so there might be sections with very few passengers or possibly empty. Thats why we are considering rates per total passengers instead of per number of seats.
+```{r add mortality rates}
+accident_data <- within(accident_data, {
+  X1.third.mortality.rate <- X1.third.dead / X1.third.total
+  X2.third.mortality.rate <- X2.third.dead / X2.third.total
+  X3.third.mortality.rate <- X3.third.dead / X3.third.total
+  X1.half.mortality.rate  <- X1.half.dead  / X1.half.total
+  X2.half.mortality.rate  <- X2.half.dead  / X2.half.total
+})
+```
+
+## Exploratory Data Analysis
+
+The first step we can do is to plot some feature of the data to have a visual understanding of it. We might get some useful insights and also check for possible outliers or anomalies in the data.
+
+```{r simple boxplots}
+with(accident_data, {
+  boxplot(X1.third.mortality.rate, 
+          X2.third.mortality.rate, 
+          X3.third.mortality.rate, 
+          X1.half.mortality.rate, 
+          X2.half.mortality.rate, 
+          names = c("Front Third", "Middle Third", "Rear Third", "Front Half", "Rear Half"),
+          main = "Mortality Rates by Section",
+          ylab = "Mortality Rate",
+          xlab = "Sections",
+          col = c("red", "red", "red", "green", "green"),
+          cex.axis = 0.9)
+})
+```
+
+Intestingly, there seems to be a general trend of lower mortality rates the more rear the section is. This is seen in both the third and half divisions of the airplane.
+
+Now we can try to test the kind of population distribution of the mortality rates, to see if they follow a normal distribution or not. This will help us choose the right statistical tests for our analysis.
+
+We will try the standard Shapiro-Wilk test for normality.
+
+```{r normality tests}
+# shapiro test for normality, p-value extrated and lableled
+shapiro_results <- data.frame(
+  Section = c("Front Third", "Middle Third", "Rear Third", "Front Half", "Rear Half"),
+  P_Value = c(
+    shapiro.test(accident_data$X1.third.mortality.rate)$p.value,
+    shapiro.test(accident_data$X2.third.mortality.rate)$p.value,
+    shapiro.test(accident_data$X3.third.mortality.rate)$p.value,
+    shapiro.test(accident_data$X1.half.mortality.rate)$p.value,
+    shapiro.test(accident_data$X2.half.mortality.rate)$p.value
+  )
+)
+shapiro_results
+```
+
+All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality for all sections. This means that the mortality rates do not follow a normal distribution, let's try to plot a histogram for one of the sections to visualize an aproximately of the distribution.
+
+```{r istrogram distribution, fig.height=4, fig.width=8}
+par(mfrow = c(1, 2))
+
+colums <- c("X1.third.mortality.rate", "X3.third.mortality.rate") 
+
+for( c in colums){
+  hist(accident_data[[c]],
+       main = paste("Histogram of", gsub("\\.", " ", c)),
+       xlab = "Mortality Rate",
+       col = "lightblue",
+       border = "black",
+       breaks = 10)
+}
+```
+
+There seems that there is no clear distribution pattern, but we can se that the data is more concentrated  at either ends of the mortality rate values, expecially for the front third section.
+
+## Statistical Analysis
+
+Now that we have a better understanding of the data, we can proceed with the statistical analysis to test if there are significant differences in mortality rates between the different sections of the airplane. Also we will try to see if there is some correlation between the mortality rates and the other variables in the dataset.
+
+### Analysis of differences in mortality rates between sections
+
+Since the distribution of the mortality rates is not normal, we will not use test that assume normality, like t-tests or ANOVA.
+For this reason, we will use the Kruskal-Wallis test, which is a non-parametric test to compare the distribution of two or more groups. The null hypothesis of the Kruskal-Wallis test is that all the populations have the same distribution.
+
+```{r analysis of population differences}
+# Kruskal-Wallis test for differences in mortality rates between sections (only thirds)
+mortality_data_third <- data.frame(
+  SectionThird = rep(c("Front Third", "Middle Third", "Rear Third"), each = nrow(accident_data)),
+  MortalityRateThird = c(accident_data$X1.third.mortality.rate, 
+                    accident_data$X2.third.mortality.rate, 
+                    accident_data$X3.third.mortality.rate)
+)
+
+kruskal_result_third <- kruskal.test(MortalityRateThird ~ SectionThird, data = mortality_data_third)
+kruskal_result_third
+
+# Kruskal-Wallis test for differences in mortality rates between sections (only halves)
+mortality_data_half <- data.frame(
+  SectionHalf = rep(c("Front Half", "Rear Half"), each = nrow(accident_data)),
+  MortalityRateHalf = c(accident_data$X1.half.mortality.rate, 
+                    accident_data$X2.half.mortality.rate)
+)
+
+kruskal_result_half <- kruskal.test(MortalityRateHalf ~ SectionHalf, data = mortality_data_half)
+kruskal_result_half
+```
+
+[Interpretation of results to be added here, OR later in the report]
+
+### Modeling the mortality rates
+Now we will try to fit a model to possibly discover the effect of the other variables on the mortality rates of the different sections. The focus is not specifically on prediction, but rather on trying to find other significant difference between the sections. Now the questions are:
+
+- Are there variable that significantly affect the mortality rate?
+
+- If so, do they affect differently the various sections of the airplane?
+
+We will try to fit a Generalized Linear Model (GLM) with binomial family, since the mortality rate is a proportion (number of deaths / total number of passengers). Unfortunately, for the nature of the data, the assumptions of the binomial distribution are not met, since the passenger's deaths are not independent events. To account for this, we will use the quasibinomial family, which is a more flexible version of the binomial family that allows for overdispersion and corrects the standard errors and p-values accordingly.  
+
+```{r test glm}
+### test glm with binomial family to see the effect of other variables on mortality rate for each section
+
+## also print the varius confidence intervals for the coefficients, and trasform them into odds ratios
+glm_third_1 <- glm(cbind(accident_data$X1.third.dead, accident_data$X1.third.total - accident_data$X1.third.dead) ~ 
+                     accident_data$PhaseOfFlight + 
+                     accident_data$Time + 
+                     accident_data$Place + 
+                     accident_data$HasFire + 
+                     #accident_data$Environment + 
+                     accident_data$EnergyAbsorption + 
+                     accident_data$CrushedFuselage + 
+                     accident_data$RestraintIntact, 
+                   family = quasibinomial(link = "logit"))
+
+glm_third_1_simple <-glm_third_1
+summary(glm_third_1_simple) 
+
+confint_third_1 <- confint(glm_third_1_simple)
+odds_ratios_third_1 <- exp(coef(glm_third_1_simple))
+odds_ratios_third_1_confint <- exp(confint_third_1)
+odds_ratios_third_1_confint
+
+glm_third_2 <- glm(cbind(accident_data$X2.third.dead, accident_data$X2.third.total - accident_data$X2.third.dead) ~ 
+                     accident_data$PhaseOfFlight + 
+                     accident_data$Time + 
+                     accident_data$Place + 
+                     accident_data$HasFire + 
+                     #accident_data$Environment + 
+                     accident_data$EnergyAbsorption + 
+                     accident_data$CrushedFuselage + 
+                     accident_data$RestraintIntact, 
+                   family = quasibinomial(link = "logit"))
+summary(glm_third_2)
+
+
+
+glm_third_3 <- glm(cbind(accident_data$X3.third.dead, accident_data$X3.third.total - accident_data$X3.third.dead) ~ 
+                     accident_data$PhaseOfFlight + 
+                     accident_data$Time + 
+                     accident_data$Place + 
+                     accident_data$HasFire + 
+                     #accident_data$Environment + 
+                     accident_data$EnergyAbsorption + 
+                     accident_data$CrushedFuselage + 
+                     accident_data$RestraintIntact, 
+                   family = quasibinomial(link = "logit"))
+summary(glm_third_3)
+
+
+
+
+glm_half_1 <- glm(cbind(accident_data$X1.half.dead, accident_data$X1.half.total - accident_data$X1.half.dead) ~ 
+                     accident_data$PhaseOfFlight + 
+                     accident_data$Time + 
+                     accident_data$Place + 
+                     accident_data$HasFire + 
+                     accident_data$Environment + 
+                     accident_data$EnergyAbsorption + 
+                     accident_data$CrushedFuselage + 
+                     accident_data$RestraintIntact, 
+                   family = quasibinomial(link = "logit"))
+summary(glm_half_1)
+
+
+glm_half_2 <- glm(cbind(accident_data$X2.half.dead, accident_data$X2.half.total - accident_data$X2.half.dead) ~ 
+                     accident_data$PhaseOfFlight + 
+                     accident_data$Time + 
+                     accident_data$Place + 
+                     accident_data$HasFire + 
+                     accident_data$Environment + 
+                     accident_data$EnergyAbsorption + 
+                     accident_data$CrushedFuselage + 
+                     accident_data$RestraintIntact, 
+                   family = quasibinomial(link = "logit"))
+summary(glm_half_2)
+ 
+
+# now try to model the total mortality rate
+
+
+glm_total <- glm(cbind(accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead, 
+                       accident_data$X1.third.total + accident_data$X2.third.total + accident_data$X3.third.total - 
+                         (accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead)) ~ 
+                   accident_data$PhaseOfFlight + 
+                   accident_data$Time + 
+                   accident_data$Place + 
+                   accident_data$HasFire + 
+                   accident_data$Environment + 
+                   accident_data$EnergyAbsorption + 
+                   accident_data$CrushedFuselage + 
+                   accident_data$RestraintIntact, 
+                 family = quasibinomial(link = "logit"))
+summary(glm_total)
+glm_total_simple <- glm_total
+summary(glm_total_simple)
+
+# now get odds ratios and confidence intervals for the total model
+confint_total <- confint(glm_total_simple)
+odds_ratios_total <- exp(coef(glm_total_simple))
+odds_ratios_total_confint <- exp(confint_total)
+odds_ratios_total_confint
+
+```
 
 ```{r}
 x <- rnorm(1000)
