@@ -1,5 +1,5 @@
 ---
-title: "Plane Crash Analysis: There exist such a thing as a safest seat?"
+title: "Plane Crash Analysis: Does your seat matter?"
 subtitle: "Inferential Statistics 2025/2026"
 author: "Barbato Alberto, Naldoni Martina"
 date: "`r Sys.Date()`"
@@ -46,6 +46,15 @@ Before starting the analysis, the meaning of some terms must be clarified
  - Accident flight : when a serious accident happens on a flight, usually the companies save the flight number to refer to that flight, and change the flight number for new flights. (Example : Air France 447 was the name of the connection from Rio to Paris, after the 2009 accident the flight became Air France 445)
  
  - Serious injury : Any injury requiring more than 48 hours of hospitalization or involving broken bones (other than fingers/toes)
+ 
+ - Survivability : an accident is defined as survivable if the forces are within human limits and if the structure remained substantially intact 
+ 
+ - CREEP factors : factors that influence the survivability of an accident. They are
+    - Container : amount of cabin deformation 
+    - Restraints : analysis of the seating structure
+    - Environment : presence of lethal contact points
+    - Energy Absorption : G-load mitigation by fuselarge or landing gear
+    - Post Crash : Other factors (We considered : airport proximity, presence of fire, daytime, phase of flight)
 
 # Perspective 
 
