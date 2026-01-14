@@ -652,6 +652,10 @@ accident_data <- within(accident_data, {
 })
 ```
 
+What we see in these graphs is very interesting and significant. 
+
+In the first and second thirds we can see that in most cases, either most die or most survive. In the third third the distribution is much more even, except for the relatively high 0% mortality rate frequency. This is already a clue that the diversity is great and therefore 
+
 # Data Analysis
 
 ## Preliminary analisys 
