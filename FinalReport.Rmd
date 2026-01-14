@@ -105,7 +105,8 @@ In some cases, only the locations of the deaths were marked, thus making a stati
 Whenever a full seat x injury map was featured in the report, we calculated by hand the total passenger counts. We intentionally left out the cabin crew from our totals, since this analysis is focused on passengers. 
 
 We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft, as all aircraft are different and can't be compared seat by seat. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
- 
+
+We collected the additional information about the accident details from the aviation safety network[^8] and from Wikipedia[^9]
  
 # Data Description
 
@@ -114,57 +115,23 @@ Let's take a look at the structure and meaning of the data we gathered:
 ```{r load data}
 accident_data <- read.csv("AllCREEP_cleaned_eng.csv")
 str(accident_data)
-#
-#> str(accident_data)
-#'data.frame':   47 obs. of  26 variables:
-# $ Airline          : chr  "singapore airlines" "british airtours" "british midland" "china airlines" ...
-# $ FlightNum        : int  6 28 92 120 123 129 140 148 191 204 ...
-# $ X1.third.minor   : int  17 36 0 0 0 4 0 0 0 3 ...
-# $ X1.third.major   : int  2 0 11 0 0 0 0 0 0 0 ...
-# $ X1.third.dead    : int  15 0 22 0 136 14 18 16 55 33 ...
-# $ X2.third.minor   : int  1 30 4 5 0 5 7 1 0 25 ...
-# $ X2.third.major   : int  15 0 30 0 0 0 0 0 8 0 ...
-# $ X2.third.dead    : int  64 16 13 8 214 60 139 34 51 1 ...
-# $ X3.third.minor   : int  26 10 0 5 36 24 0 8 10 29 ...
-# $ X3.third.major   : int  17 0 27 0 0 0 0 0 7 0 ...
-# $ X3.third.dead    : int  0 36 11 21 109 43 91 30 16 0 ...
-# $ X1.half.minor    : int  17 56 32 3 0 7 7 1 0 7 ...
-# $ X1.half.major    : int  3 0 0 0 0 0 0 0 1 0 ...
-# $ X1.half.dead     : int  41 8 34 6 226 23 95 36 79 35 ...
-# $ X2.half.minor    : int  26 20 39 7 4 26 0 7 10 46 ...
-# $ X2.half.major    : int  31 0 0 0 0 0 0 0 14 0 ...
-# $ X2.half.dead     : int  34 44 13 23 225 90 145 46 48 0 ...
-# $ DataOrigin       : chr  "w" "w" "w" "w" ...
-# $ PhaseOfFlight    : chr  "takeoff" "takeoff" "landing" "landing" ...
-# $ Time             : chr  "night" "day" "night" "day" ...
-# $ Place            : chr  "airport" "outside" "outside" "airport" ...
-# $ HasFire          : chr  "fire" "fire" "fire" "fire" ...
-# $ CrushedFuselage : int  1 1 1 1 1 1 1 1 1 1 ...
-# $ RestraintIntact : int  0 0 0 1 0 0 0 0 0 0 ...
-# $ Environment      : chr  "dangerous" "dangerous" "dangerous" "clear" ...
-# $ EnergyAbsorption: chr  "nogear" "nogear" "gear" "nogear" ...
-#> 
-#
+
 ```
 
 ## Data Points and Variables 
 
 The data consists of 47 observations (aircraft accidents) and 26 variables. They are the focus of our analysis.
 
-We want to remark that the data consists only of aircraft accidents where there was at least 1 survivor and at least 1 fatality, because the final goal was to compare mortality rates.
-
-// ... 
+We want to remark that the data consists only of aircraft accidents where there were at least 3 fatalities and more than 30 passengers onboard, because the final goal was to compare mortality rates. In this section we give more detail on the additional variables gathered for each accident 
 
 The variables consist of:
 
 - **Airline & FlightNum** : identifier of the aircraft accident. Useful to retrieve more information about the accident if needed. 
 
 - **X variables** : these variables represent the number and the type of injury (minor-none / serious / fatal) in each section of the airplane (Each third and each half). 
-//...
 The format is the following : `X{section}.{part}.{type of injury}`, where section is 1,2,3 for the thirds and 1,2 for the halves, part is "third" or "half", and type of injury is "minor", "major" or "dead".
 
 - **DataOrigin** : source of the data, either Wikipedia (W) or directly from the final report (FR) or other sources (empty).
-// Remove Column in the data 
 
 - **PhaseOfFlight** : phase of flight when the accident happened, The possible values are "takeoff" or "landing", landing includes emergency landings.
 
@@ -183,12 +150,12 @@ The format is the following : `X{section}.{part}.{type of injury}`, where sectio
 - **EnergyAbsorption** : indicates if the landing gear was extended and if it absorbed a significant amount of impact forces before collapsing. If not, the airplane either hit the ground wit the gear retracted or hit the ground nose-first or tail-first, causing the impact forces to be absorbed by the passenger cabin. Possible values are "gear" or "nogear"
 
 // fix nogear --> no-gear
+// remove dataorigin
 
 ## Mortality Rates
 
-To start the analysis, let's prepare the data by adding some useful variables, and transform some variables into a more manageable format.
-
-//...
+To start the analysis, let's preprocess the data by creating the mortality rates for each section. We first proceed to add the totals for each section, and then use it to generate the mortality rates. 
+We also transform the categorical variables into factors. 
 
 ```{r data preparation}
 # add a colum of # of passengers for each airplain section
@@ -221,10 +188,6 @@ accident_data <- within(accident_data, {
   X2.half.mortality.rate  <- X2.half.dead  / X2.half.total
 })
 ```
-
-What we see in these graphs is very interesting and significant. 
-
-In the first and second thirds we can see that in most cases, either most die or most survive. In the third third the distribution is much more even, except for the relatively high 0% mortality rate frequency. This is already a clue that the diversity is great and therefore 
 
 # Data Analysis
 
@@ -486,3 +449,5 @@ hist(x)
 [^5]: [https://www.wired.com/story/whats-the-safest-seat-on-an-airplane/]
 [^6]: [https://www.allianz.com/content/dam/onemarketing/azcom/Allianz_com/migration/media/press/document/other/AGCS-Global-Aviation-Safety-Study-2014.pdf]
 [^7]: [https://flyfright.com/plane-crash-statistics/#tve-jump-18c020d9166]
+[^8]: [https://aviation-safety.net/asndb/]
+[^9]: [https://en.wikipedia.org/wiki/List_of_accidents_and_incidents_involving_commercial_aircraft]
