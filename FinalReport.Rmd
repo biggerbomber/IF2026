@@ -71,6 +71,35 @@ reported these figures studying the US General aviation data between 2015 and 20
 
  - $\frac{1}{816,545,929}$ chance of you specifically, dying in a plane crash
  
+# Literature
+
+While we found no scientific article about this issue, there are many news articles that claim to have conducted "statistical analysis" on aircraft accident data to find which area is the safest in case of a crash. We now list some of their findings : 
+
+ - *Time Article* : "Statistics show that the middle seats in the rear of an aircraft historically have the highest survival rates. [...] The analysis found that the seats in the back third of the aircraft had a 32% fatality rate, compared with 39% in the middle third and 38% in the front third.". This article was written in June 2015.
+ 
+ - https://time.com/3934663/safest-seat-airplane/
+ 
+ - *Reuters Article* :  "Data reveals civil aviation’s most astonishing, exceptional survivals—and shows no seat is reliably safe." 
+ 
+ - https://www.reuters.com/graphics/AVIATION-SAFETY/lgpdaagabvo/
+ 
+ - *Aeroclass Article* : "An analysis of several accidents reveals that:The seats in the back third of the aircraft have a fatality rate of 32%. The seats in the middle third of the plane have a fatality rate of 39%. The seats in the front third have a fatality rate of 38%. [...] The crash data indicates that the front third and middle third of the plane have higher fatality rates than the back third of the plane." This article was written in November 2017.
+ 
+ - https://www.aeroclass.org/the-safest-place-to-sit-on-a-plane/
+ 
+ - *Wired Article* : "While no part of the plane may generally be the safest [...] Each airline emergency plays out differently, affecting different seats more than others each time."
+ 
+ - https://www.wired.com/story/whats-the-safest-seat-on-an-airplane/
+ 
+ - *Allianz Report - Popular Mechanics* : Popular Mechanics also examined 20 accidents and calculated the survival rate in each of four sections of the aircraft. Its results found that in 11 of the 20 crashes, passengers in the rear of the aircraft had a better chance of survival. In seven of those 11 crashes favoring the rear of the aircraft they found the rear section was the only section with survivors. In five accidents the first class and business class
+section fared the best with a 49% survivability rate. In three out of the 20 crashes no one location had an advantage.
+
+ - *Allianz Report - University of Greenwich* :  the University of Greenwich studied 105 airline accidents worldwide, and this study concluded that the safest seat on an aircraft is in the one on the aisle nearest the exit, in the front of the aircraft. This seat has a survivability rate of 65% whereas a passenger seated in the rear section only has a 53% survivability rate. Additionally, any seat in the aisle near an exit offers a greater chance of survivability. When seated more than six rows from an exit “the chances of perishing far outweigh those of surviving”
+ 
+ - https://www.allianz.com/content/dam/onemarketing/azcom/Allianz_com/migration/media/press/document/other/AGCS-Global-Aviation-Safety-Study-2014.pdf
+ 
+
+ 
 
 
  
@@ -495,9 +524,9 @@ corrplot(correlation_results_2, method = "ellipse", type = "upper", tl.col = "bl
 # Data Description & Analysis
 
 For this experiment, we found that there were no already available datasets to get the accident seating diagrams.
-We decided that we would gather the informations from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from wikipedia after checking that the source was indeed the final report of the investigation into the accident. 
+We decided that we would gather the information from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident. 
 
-We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft. Not knowing if dividing into thirds or halves, we inserted both these informations in our dataset. 
+We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
 
 Let's take a look at the structure and meaning of the data we gathered:
 
