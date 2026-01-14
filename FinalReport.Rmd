@@ -20,16 +20,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-The Aviation industry is one of the safest in the world. The systems that it has in place to learn lessons from accidents and make sure they never happen again is well-established and highly regarded. This has made traveling by plane the safest way to travel. 
+The Aviation industry is one of the safest in the world. The systems that it has put in place to learn lessons from accidents and make sure they never happen again is well-established and highly regarded. This has made traveling by plane the safest way to travel. 
 https://flyfright.com/plane-crash-statistics/#:~:text=Based%20on%20statistics%20from%202015,unharmed%2C%20injured%2C%20or%20killed
 
 But perhaps due to these high safety standards, when an aircraft accident happens it makes headlines all over the world. Anxious passengers fear it's going to happen to them as well and they can't help but ask themselves if there is something they could do to have a safer flight. 
 
 One of the most frequent question that gets asked is : is there a part of the plane that is "safer" than other parts? Can the seating location make a difference in an accident? 
-There are many articles where experts in the field give their opinions, and most answer that "yes, there are areas that give a higher chance of survival in case of an aircraft accident". 
-But there are also studies that suggest that there is no safest seats on an airplane. 
 
-So, who is right? We are going to try to answer this question using statistics.
+We are going to try to answer this question using statistics.
 
 ## Vocabulary
 
@@ -56,21 +54,7 @@ Before starting the analysis, the meaning of some terms must be clarified
     - Energy Absorption : G-load mitigation by fuselarge or landing gear
     - Post Crash : Other factors (We considered : airport proximity, presence of fire, daytime, phase of flight)
 
-## Perspective 
 
-We are studying if the seating in an airplane has an effect on the survivability of an aircraft accident. To study this, we need to look at all aircraft accidents, then rule out the accidents where every passenger survived, and every accident in which every passenger died. This is an extremely narrow data set of accidents. Of these accidents, we gathered the seatings arrangements and survivor seating maps for 47 crashes. 
-
-If 47 crashes look like a lot, we should consider the greater perspective of air travel safety in general.
-
-https://flyfright.com/plane-crash-statistics/#tve-jump-18c020d9166
-reported these figures studying the US General aviation data between 2015 and 2020 : 
- 
- - $\frac{1}{260256}$ :  chance of boarding any flight and it being an accident flight
- 
- - $\frac{1}{6,864,250}$ : chance of being on a plane involved in an accident that results in at least 1 fatality (possible case study of this study)
-
- - $\frac{1}{816,545,929}$ chance of you specifically, dying in a plane crash
- 
 ## Literature
 
 While we found no scientific article about this issue, there are many news articles that claim to have conducted "statistical analysis" on aircraft accident data to find which area is the safest in case of a crash. We now list some of their findings : 
@@ -98,7 +82,39 @@ section fared the best with a 49% survivability rate. In three out of the 20 cra
  
  - https://www.allianz.com/content/dam/onemarketing/azcom/Allianz_com/migration/media/press/document/other/AGCS-Global-Aviation-Safety-Study-2014.pdf
  
+ 
+## Perspective 
 
+We are studying if the seating in an airplane has an effect on the survivability of an aircraft accident. To study this, we need to look at all aircraft accidents, then rule out the accidents where every passenger survived, and every accident in which every passenger died. This is an extremely narrow data set of accidents. Of these accidents, we gathered the seatings arrangements and survivor seating maps for 47 crashes. 
+
+If 47 crashes look like a lot, we should consider the greater perspective of air travel safety in general.
+
+https://flyfright.com/plane-crash-statistics/#tve-jump-18c020d9166
+reported these figures studying the US General aviation data between 2015 and 2020 : 
+ 
+ - $\frac{1}{260256}$ :  chance of boarding any flight and it being an accident flight
+ 
+ - $\frac{1}{6,864,250}$ : chance of being on a plane involved in an accident that results in at least 1 fatality (possible case study of this study)
+
+ - $\frac{1}{816,545,929}$ chance of you specifically, dying in a plane crash
+ 
+## Data Gathering Process
+
+For this experiment, we found that there weren't already available datasets to get the accident seating maps.
+
+//talk about the fact that in all major accidents either all die or all survive --> wikipedia list 
+
+//not all incidents feature a map. Not all incidents where people both survived and died were crashs (11A)
+// argue that we have a significative dataset
+
+We decided that we would gather the information from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident. 
+
+//What are FR and that they are official ; redacted by apposite agencies - only official document 
+
+//manually counted all seats, so the data is ours. PILOTS AND FA not included as they are not passengers
+
+We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
+//not all aircraft have the same seating arrangements, little data --> 3 and 2 
  
 
 
@@ -523,11 +539,6 @@ corrplot(correlation_results_2, method = "ellipse", type = "upper", tl.col = "bl
 
 # Data Description
 
-For this experiment, we found that there were no already available datasets to get the accident seating diagrams.
-We decided that we would gather the information from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident. 
-
-We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
-
 Let's take a look at the structure and meaning of the data we gathered:
 
 ```{r load data}
@@ -570,16 +581,20 @@ str(accident_data)
 
 The data consists of 47 observations (aircraft accidents) and 26 variables. They are the focus of our analysis.
 
-We want to remark that the data consists only of aircraft accidents where there was at least 1 survivor and at least 1 fatality, because the final goal was to compare mortality rates. 
+We want to remark that the data consists only of aircraft accidents where there was at least 1 survivor and at least 1 fatality, because the final goal was to compare mortality rates.
 
-The variables consists of:
+// ... 
+
+The variables consist of:
 
 - **Airline & FlightNum** : identifier of the aircraft accident. Useful to retrieve more information about the accident if needed. 
 
-- **X variables** : these variables represent the number and the type of injury (light-none / serious / fatal) in each section of the airplane (Each third and each half). 
+- **X variables** : these variables represent the number and the type of injury (minor-none / serious / fatal) in each section of the airplane (Each third and each half). 
+//...
 The format is the following : `X{section}.{part}.{type of injury}`, where section is 1,2,3 for the thirds and 1,2 for the halves, part is "third" or "half", and type of injury is "minor", "major" or "dead".
 
 - **DataOrigin** : source of the data, either Wikipedia (W) or directly from the final report (FR) or other sources (empty).
+// Remove Column in the data 
 
 - **PhaseOfFlight** : phase of flight when the accident happened, The possible values are "takeoff" or "landing", landing includes emergency landings.
 
@@ -589,18 +604,22 @@ The format is the following : `X{section}.{part}.{type of injury}`, where sectio
 
 - **HasFire**  : indicates if there was an uncontained fire after the crash that spread to the cabin. Possible values are "fire" or "no-fire".
 
-- **CrushedFuselage** : indicates if the fuselage was crushed (deformed with significant loss of volume) during the accident, possible values are 1 (yes) or 0 (no).
+- **CrushedFuselage** : indicates if the fuselage was crushed, so deformed with significant loss of volume,  during the accident. Possible values are 1 (yes) or 0 (no).
 
-- **RestraintIntact** : indicates if the restraint system was intact (if the seating structure remained intact and the seat belt system functioned correctly), possible values are 1 (yes) or 0 (no).
+- **RestraintIntact** : if the seating structure remained intact and the seat belt system functioned correctly, the Restraint system is considered to have functioned correctly. Possible values are 1 (yes) or 0 (no).
 
-- **Environment** : indicates the state of the cabin after the crash (dangerous if it was determined that parts of the cabin like overhead bins failed and debris was scattered in the cabin), possible values are "clear" or "dangerous".
+- **Environment** : indicates the state of the cabin after the crash. Possible values are "clear" or "dangerous". It is considered dangerous if it was determined that parts of the cabin like overhead bins failed and debris was scattered in the cabin. 
 
-- **EnergyAbsorption** : indicates if the landing gear was extended and if it absorbed a significant amount of impact forces before collapsing (if not the airplane either hit the ground wit the gear retracted or hit the ground nose-first or tail-first, causing the impact forces to be absorbed by the passenger cabin).
+- **EnergyAbsorption** : indicates if the landing gear was extended and if it absorbed a significant amount of impact forces before collapsing. If not, the airplane either hit the ground wit the gear retracted or hit the ground nose-first or tail-first, causing the impact forces to be absorbed by the passenger cabin. Possible values are "gear" or "nogear"
 
+// fix nogear --> no-gear
 
 ## Mortality Rates
 
-To start the analysis, let's prepare the data by adding some useful variables, and trasform some variables into a more manageable format.
+To start the analysis, let's prepare the data by adding some useful variables, and transform some variables into a more manageable format.
+
+//...
+
 ```{r data preparation}
 # add a colum of # of passengers for each airplain section
 accident_data <- within(accident_data, {
@@ -618,8 +637,10 @@ factor_cols <- c("PhaseOfFlight", "Time", "Place", "HasFire", "Environment",
 accident_data[factor_cols] <- lapply(accident_data[factor_cols], as.factor)
 ```
 
-Now we can add a new variable that will be the center of our analysis : the mortality rate for each section of the airplane. The mortality rate is defined as the number of deaths divided by the total number of passengers in the section, for each section. 
-Note that aircraft don't always fly on a full load of passengers, so there might be sections with very few passengers or possibly empty. Thats why we are considering rates per total passengers instead of per number of seats.
+Now we can add a new variable that will be the center of our analysis : the mortality rate.
+It is measured for each section of the airplane. 
+The mortality rate is defined as the number of deaths divided by the total number of passengers in the section, for each section. 
+Note that aircraft don't always fly on a full load of passengers, so there might be sections with very few passengers or possibly empty. That's why we are considering rates per total passengers instead of per number of seats.
 
 ```{r add mortality rates}
 accident_data <- within(accident_data, {
@@ -631,9 +652,14 @@ accident_data <- within(accident_data, {
 })
 ```
 
-# Exploratory Data Analysis
+# Data Analysis
 
-The first step we can do is to plot some feature of the data to have a visual understanding of it. We might get some useful insights and also check for possible outliers or anomalies in the data.
+## Preliminary analisys 
+
+### Plotting
+
+The first step we can do is plotting some feature of the data to have a visual understanding of it. 
+We do this to get some useful insights and also check for possible outliers or anomalies.
 
 ```{r simple boxplots}
 with(accident_data, {
@@ -651,13 +677,14 @@ with(accident_data, {
 })
 ```
 
-Intestingly, there seems to be a general trend of lower mortality rates the more rear the section is. This is seen in both the third and half divisions of the airplane.
+Intestingly, there seems to be a general trend of lowering mortality rates the more rear the section is. 
+This is seen in both the third and half divisions of the airplane.
 
-## Distribution of the data
+### Distribution 
 
 Now we can try to test the kind of population distribution of the mortality rates, to see if they follow a normal distribution or not. This will help us choose the right statistical tests for our analysis.
 
-We will try the standard Shapiro-Wilk test for normality.
+We will use the Shapiro-Wilk test for normality.
 
 ```{r normality tests}
 # shapiro test for normality, p-value extrated and lableled
@@ -674,7 +701,7 @@ shapiro_results <- data.frame(
 shapiro_results
 ```
 
-All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality for all sections. This means that the mortality rates do not follow a normal distribution, let's try to plot a histogram for one of the sections to visualize an approximation of the distribution.
+All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality for all sections. This means that the mortality rates do not follow a normal distribution, let's try to plot a histogram for some of the sections to visualize an approximation of the distribution.
 
 ```{r istrogram distribution, fig.height=4, fig.width=8}
 par(mfrow = c(1, 2))
@@ -691,7 +718,8 @@ for( c in colums){
 }
 ```
 
-It seems that there is no clear distribution pattern, but we can see that the data is more concentrated  at either end of the mortality rate values, especially for the front third section.
+It seems that there is no clear distribution pattern. 
+What we can see is that the data is more concentrated at both ends of the mortality rate values, especially for the front third section.
 
 ## Statistical Analysis of differences in mortality rates between sections
 
