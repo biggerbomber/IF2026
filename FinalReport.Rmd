@@ -703,19 +703,32 @@ shapiro_results
 
 All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality for all sections. This means that the mortality rates do not follow a normal distribution, let's try to plot a histogram for some of the sections to visualize an approximation of the distribution.
 
-```{r istrogram distribution, fig.height=4, fig.width=8}
-par(mfrow = c(1, 2))
+```{r istrogram distribution third, fig.height=8, fig.width=8, echo=FALSE}
+par(mfrow = c(3, 2))
 
-colums <- c("X1.third.mortality.rate", "X3.third.mortality.rate") 
+colums <- c("X1.third.mortality.rate","X2.third.mortality.rate" ,"X3.third.mortality.rate") 
 
 for( c in colums){
   hist(accident_data[[c]],
        main = paste("Histogram of", gsub("\\.", " ", c)),
        xlab = "Mortality Rate",
-       col = "lightblue",
+       col = "darkgreen",
        border = "black",
        breaks = 10)
 }
+
+plot.new()
+
+colums_half <- c("X1.half.mortality.rate","X2.half.mortality.rate")
+for( c in colums_half){
+  hist(accident_data[[c]],
+       main = paste("Histogram of", gsub("\\.", " ", c)),
+       xlab = "Mortality Rate",
+       col = "orange",
+       border = "black",
+       breaks = 10)
+}
+
 ```
 
 It seems that there is no clear distribution pattern. 
