@@ -31,7 +31,7 @@ But there are also studies that suggest that there is no safest seats on an airp
 
 So, who is right? We are going to try to answer this question using statistics.
 
-# Vocabulary
+## Vocabulary
 
 Before starting the analysis, the meaning of some terms must be clarified 
 
@@ -56,7 +56,7 @@ Before starting the analysis, the meaning of some terms must be clarified
     - Energy Absorption : G-load mitigation by fuselarge or landing gear
     - Post Crash : Other factors (We considered : airport proximity, presence of fire, daytime, phase of flight)
 
-# Perspective 
+## Perspective 
 
 We are studying if the seating in an airplane has an effect on the survivability of an aircraft accident. To study this, we need to look at all aircraft accidents, then rule out the accidents where every passenger survived, and every accident in which every passenger died. This is an extremely narrow data set of accidents. Of these accidents, we gathered the seatings arrangements and survivor seating maps for 47 crashes. 
 
@@ -71,7 +71,7 @@ reported these figures studying the US General aviation data between 2015 and 20
 
  - $\frac{1}{816,545,929}$ chance of you specifically, dying in a plane crash
  
-# Literature
+## Literature
 
 While we found no scientific article about this issue, there are many news articles that claim to have conducted "statistical analysis" on aircraft accident data to find which area is the safest in case of a crash. We now list some of their findings : 
 
@@ -102,7 +102,7 @@ section fared the best with a 49% survivability rate. In three out of the 20 cra
  
 
 
- 
+# Graph dump TO ORGANIZE 
 
 
 ```{r}
@@ -566,6 +566,8 @@ str(accident_data)
 #
 ```
 
+## Data Points and Variables 
+
 The data consists of 47 observations (aircraft accidents) and 26 variables. They are the focus of our analysis.
 
 We want to remark that the data consists only of aircraft accidents where there was at least 1 survivor and at least 1 fatality, because the final goal was to compare mortality rates. 
@@ -595,6 +597,8 @@ The format is the following : `X{section}.{part}.{type of injury}`, where sectio
 
 - **EnergyAbsorption** : indicates if the landing gear was extended and if it absorbed a significant amount of impact forces before collapsing (if not the airplane either hit the ground wit the gear retracted or hit the ground nose-first or tail-first, causing the impact forces to be absorbed by the passenger cabin).
 
+
+## Mortality Rates
 
 To start the analysis, let's prepare the data by adding some useful variables, and trasform some variables into a more manageable format.
 ```{r data preparation}
@@ -627,7 +631,7 @@ accident_data <- within(accident_data, {
 })
 ```
 
-## Exploratory Data Analysis
+# Exploratory Data Analysis
 
 The first step we can do is to plot some feature of the data to have a visual understanding of it. We might get some useful insights and also check for possible outliers or anomalies in the data.
 
@@ -648,6 +652,8 @@ with(accident_data, {
 ```
 
 Intestingly, there seems to be a general trend of lower mortality rates the more rear the section is. This is seen in both the third and half divisions of the airplane.
+
+## Distribution of the data
 
 Now we can try to test the kind of population distribution of the mortality rates, to see if they follow a normal distribution or not. This will help us choose the right statistical tests for our analysis.
 
@@ -687,11 +693,11 @@ for( c in colums){
 
 It seems that there is no clear distribution pattern, but we can see that the data is more concentrated  at either end of the mortality rate values, especially for the front third section.
 
-## Statistical Analysis
+## Statistical Analysis of differences in mortality rates between sections
 
 Now that we have a better understanding of the data, we can proceed with the statistical analysis to test if there are significant differences in mortality rates between the different sections of the airplane. Also, we will try to see if there is some correlation between the mortality rates and the other variables in the dataset.
 
-### Analysis of differences in mortality rates between sections
+
 
 Since the distribution of the mortality rates is not normal, we will not use tests that assume normality, like t-tests or ANOVA.
 For this reason, we will use the Kruskal-Wallis test, which is a non-parametric test to compare the distribution of two or more groups. The null hypothesis of the Kruskal-Wallis test is that all the populations have the same distribution.
