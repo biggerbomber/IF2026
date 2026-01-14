@@ -116,7 +116,7 @@ We decided that we would gather the information from the final reports that are 
 We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
 //not all aircraft have the same seating arrangements, little data --> 3 and 2 
  
- 
+
 # Data Description
 
 Let's take a look at the structure and meaning of the data we gathered:
@@ -229,6 +229,8 @@ accident_data <- within(accident_data, {
   X3.third.mortality.rate <- X3.third.dead / X3.third.total
   X1.half.mortality.rate  <- X1.half.dead  / X1.half.total
   X2.half.mortality.rate  <- X2.half.dead  / X2.half.total
+  Total.mortality.rate <- (X1.third.dead + X2.third.dead + X3.third.dead) / 
+                          (X1.third.total + X2.third.total + X3.third.total)
 })
 ```
 
@@ -285,7 +287,7 @@ shapiro_results <- data.frame(
 shapiro_results
 ```
 
-All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality for all sections. This means that the mortality rates do not follow a normal distribution, let's try to plot a histogram for some of the sections to visualize an approximation of the distribution.
+All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality for all sections. This means that the mortality rates do not follow a normal distribution, let's try to plot a histogram for all of the sections to visualize an approximation of the distribution.
 
 ```{r istrogram distribution third, fig.height=8, fig.width=8, echo=FALSE}
 par(mfrow = c(3, 2))
@@ -298,7 +300,7 @@ for( c in colums){
        xlab = "Mortality Rate",
        col = "darkgreen",
        border = "black",
-       breaks = 100)
+       breaks = 10)
 }
 
 ##histogram for total mortality rate
@@ -308,28 +310,30 @@ hist((accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$
      xlab = "Mortality Rate",
      col = "purple",
      border = "black",
-     breaks = 100)
-
-# check for value ==1 or value ==0 of the total mortality rate
-accident_data$Total.mortality.rate <- (accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead) / 
-  (accident_data$X1.third.total + accident_data$X2.third.total + accident_data$X3.third.total)
-#sum(accident_data$Total.mortality.rate == 1) # 0
-#sum(accident_data$Total.mortality.rate == 0) # 1
-
-
-
+     breaks = 10)
 
 
 colums_half <- c("X1.half.mortality.rate","X2.half.mortality.rate")
+
 for( c in colums_half){
   hist(accident_data[[c]],
        main = paste("Histogram of", gsub("\\.", " ", c)),
        xlab = "Mortality Rate",
        col = "orange",
        border = "black",
-       breaks = 100)
+       breaks = 10)
 }
+```
 
+It seems that there is no clear distribution pattern. 
+What we can see is that the data is more concentrated at both ends of the mortality rate values, especially for the front third section. Seams like in most accidents, either most people die or most people survive, with few accidents in the middle ground.
+ 
+## Correlation between sections
+
+Since the mortality rates are from the same accidents, it is possible that there is some correlation between them.
+To visualize this, we can create a scatterplot matrix of the mortality rates of the different sections. We will also color the points based on the total mortality rate of the accident, to se if there is some pattern.
+
+```{r scatterplot matrix, fig.height=8, fig.width=8, echo=FALSE}
 library(corrplot)
 
 # 1. Setup Data
@@ -337,6 +341,8 @@ correlation_matrix <- data.frame(
   Front_Third = accident_data$X1.third.mortality.rate,
   Middle_Third = accident_data$X2.third.mortality.rate,
   Rear_Third = accident_data$X3.third.mortality.rate,
+  Front_Half = accident_data$X1.half.mortality.rate,
+  Rear_Half = accident_data$X2.half.mortality.rate,
   Total_Mortality_Rate = accident_data$Total.mortality.rate
 )
 
@@ -347,7 +353,7 @@ rbPal <- colorRampPalette(c("green", "red"))
 # Map the Total_Mortality_Rate variable to 100 bins (shades of color)
 # 'cut' divides the numeric range into intervals, returning the index (1-100)
 # We use that index to pick the specific color from rbPal
-point_colors <- rbPal(2)[as.numeric(cut(correlation_matrix$Total_Mortality_Rate, breaks = 2))]
+point_colors <- rbPal(100)[as.numeric(cut(correlation_matrix$Total_Mortality_Rate, breaks = 100))]
 
 # 3. Plot
 scatterplot_matrix <- function(data) {
@@ -362,14 +368,27 @@ scatterplot_matrix <- function(data) {
 scatterplot_matrix(correlation_matrix)
 ```
 
-It seems that there is no clear distribution pattern. 
-What we can see is that the data is more concentrated at both ends of the mortality rate values, especially for the front third section.
+```{r correlation plot, fig.height=6, fig.width=6, echo=FALSE}
+
+corr_res <- cor(correlation_matrix, use = "complete.obs")
+corrplot(corr_res, method = "ellipse", 
+         title = "Correlation Matrix of Mortality Rates",
+         mar = c(0,0,1,0),
+         type = "upper")
+```
+
+As we can see from both the scatterplot matrix and the correlation plot, there is a strong positive correlation between the mortality rates of the different sections and the total mortality rate. Also there are no evident asymmetries on the color distribution.
+We notice that the correlation is weakest between the front third and the rear third: in fact, the more 2 sections are distant physically, the less correlated they are in this data; also similar distance leads to similar correlation values:
+```{r correlation values}
+## compare front third - middle third correlation with middle third - rear third correlation
+corr_res
+```
+
+The correlation with the total mortality rate is very high for all sections, indicating that when the total mortality rate is high, all sections tend to have high mortality rates, which is expected.
 
 ## Statistical Analysis of differences in mortality rates between sections
 
 Now that we have a better understanding of the data, we can proceed with the statistical analysis to test if there are significant differences in mortality rates between the different sections of the airplane. Also, we will try to see if there is some correlation between the mortality rates and the other variables in the dataset.
-
-
 
 Since the distribution of the mortality rates is not normal, we will not use tests that assume normality, like t-tests or ANOVA.
 We will instead use the Kruskal-Wallis test, which is a non-parametric test to compare the distribution of two or more groups. The null hypothesis of the Kruskal-Wallis test is that all the populations have the same distribution.
@@ -397,11 +416,12 @@ kruskal_result_half <- kruskal.test(MortalityRateHalf ~ SectionHalf, data = mort
 kruskal_result_half
 ```
 
-[Interpretation of results to be added here, OR later in the report]
+The Kruskal-Wallis tests returned p-values of 0.1811 (for thirds) and 0.371 (for halves). In both cases, the p-value is above the standard significance level of 0.05. Therefore, we cannot reject the null hypothesis. Despite the visual trends observed in the boxplots, our statistical analysis indicates that there is no significant difference in mortality rates between the different sections of the aircraft, no matter if divided into thirds or halves. The location of the seat (Front, Middle, or Rear) does not appear to be a statistically determining factor for survivability in this dataset.
+The trend that we observed in the boxplots could be caused just by random variation in the data, and not by a real effect of the seating location on mortality rates. There could also be a problem of low statistical power due to the small sample size and/or the high variability of the data observed in the histograms.
 
 ## Modeling the mortality rates
 
-Now we will try to fit a model to possibly discover the effect of the other variables on the mortality rates of the different sections. The focus is not specifically on prediction, but rather on trying to find a significant difference between the sections. Now the questions are:
+Now we will try to fit a model to possibly discover the effect of the other variables on the mortality rates of the different sections. The focus is not specifically on prediction, but rather on trying to find a significant difference between the sections, in matter of correlation with the other variables. Now the questions are:
 
 - Are there variables that significantly affect the mortality rate?
 
@@ -417,33 +437,33 @@ To account for this, we will use the quasibinomial family, which is a more flexi
 
 ## also print the varius confidence intervals for the coefficients, and trasform them into odds ratios
 glm_third_1 <- glm(cbind(accident_data$X1.third.dead, accident_data$X1.third.total - accident_data$X1.third.dead) ~ 
-                     #accident_data$PhaseOfFlight + 
-                     #accident_data$Time + 
-                     #accident_data$Place + 
+                     accident_data$PhaseOfFlight + 
+                     accident_data$Time + 
+                     accident_data$Place + 
                      accident_data$HasFire + 
-                     #accident_data$Environment + 
+                     accident_data$Environment + 
                      accident_data$EnergyAbsorption + 
                      accident_data$CrushedFuselage + 
                      accident_data$RestraintIntact, 
                    family = quasibinomial(link = "logit"))
 
 glm_third_2 <- glm(cbind(accident_data$X2.third.dead, accident_data$X2.third.total - accident_data$X2.third.dead) ~ 
-                     #accident_data$PhaseOfFlight + 
-                     #accident_data$Time + 
-                     #accident_data$Place + 
+                     accident_data$PhaseOfFlight + 
+                     accident_data$Time + 
+                     accident_data$Place + 
                      accident_data$HasFire + 
-                     #accident_data$Environment + 
+                     accident_data$Environment + 
                      accident_data$EnergyAbsorption + 
                      accident_data$CrushedFuselage + 
                      accident_data$RestraintIntact, 
                    family = quasibinomial(link = "logit"))
 
 glm_third_3 <- glm(cbind(accident_data$X3.third.dead, accident_data$X3.third.total - accident_data$X3.third.dead) ~ 
-                     #accident_data$PhaseOfFlight + 
-                     #accident_data$Time + 
-                     #accident_data$Place + 
+                     accident_data$PhaseOfFlight + 
+                     accident_data$Time + 
+                     accident_data$Place + 
                      accident_data$HasFire + 
-                     #accident_data$Environment + 
+                     accident_data$Environment + 
                      accident_data$EnergyAbsorption + 
                      accident_data$CrushedFuselage + 
                      accident_data$RestraintIntact, 
@@ -454,11 +474,11 @@ glm_third_3 <- glm(cbind(accident_data$X3.third.dead, accident_data$X3.third.tot
 glm_total <- glm(cbind(accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead, 
                        accident_data$X1.third.total + accident_data$X2.third.total + accident_data$X3.third.total - 
                          (accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead)) ~ 
-                   #accident_data$PhaseOfFlight + 
-                   #accident_data$Time + 
-                   #accident_data$Place + 
+                   accident_data$PhaseOfFlight + 
+                   accident_data$Time + 
+                   accident_data$Place + 
                    accident_data$HasFire + 
-                   #accident_data$Environment + 
+                   accident_data$Environment + 
                    accident_data$EnergyAbsorption + 
                    accident_data$CrushedFuselage + 
                    accident_data$RestraintIntact, 
@@ -469,16 +489,92 @@ glm_total <- glm(cbind(accident_data$X1.third.dead + accident_data$X2.third.dead
 
 
 ```{r glm summaries}
-summary(glm_third_1)
-summary(glm_third_2)
-summary(glm_third_3)
-summary(glm_total)
+anova(glm_third_1, test = "Chisq")
+anova(glm_third_2, test = "Chisq")
+anova(glm_third_3, test = "Chisq")
+anova(glm_total, test = "Chisq")
+
+
+
+# Function to calculate Deviance Explained
+calc_strength <- function(model, name) {
+  # Extract deviances
+  null_dev <- model$null.deviance
+  resid_dev <- model$deviance
+  
+  # Calculate Percentage Explained
+  d2 <- 1 - (resid_dev / null_dev)
+  
+  # Return formatted result
+  return(data.frame(
+    Section = name,
+    Null_Deviance = round(null_dev, 1),
+    Resid_Deviance = round(resid_dev, 1),
+    Deviance_Explained = paste0(round(d2 * 100, 1), "%")
+  ))
+}
+
+# Run for all your models
+strength_front  <- calc_strength(glm_third_1, "Front")
+strength_middle <- calc_strength(glm_third_2, "Middle")
+strength_rear   <- calc_strength(glm_third_3, "Rear")
+strength_total  <- calc_strength(glm_total,   "Total")
+
+# Combine and View
+model_power <- rbind(strength_front, strength_middle, strength_rear, strength_total)
+print(model_power)
 ```
 
 
 ```{r}
-x <- rnorm(1000)
-hist(x)
+
+summary(accident_data)
+
+
+
+# 1. Create the Binary Target (0 = Mostly Survived, 1 = Mostly Died)
+# We calculate the total rate first to ensure we capture the whole plane
+accident_data$TotalPassengers <- accident_data$X1.third.total + 
+                                 accident_data$X2.third.total + 
+                                 accident_data$X3.third.total
+
+accident_data$TotalDeaths     <- accident_data$X1.third.dead + 
+                                 accident_data$X2.third.dead + 
+                                 accident_data$X3.third.dead
+
+# Calculate Rate
+accident_data$GlobalRate <- accident_data$TotalDeaths / accident_data$TotalPassengers
+
+# Create Binary Variable (Split at 50%)
+accident_data$FatalCrash <- ifelse(accident_data$GlobalRate > 0.50, 1, 0)
+
+# Check the split (Should be roughly balanced)
+table(accident_data$FatalCrash)
+
+
+#2. Run the GLM with ALL predictors
+glm_binary_full <- glm(FatalCrash ~ PhaseOfFlight + 
+                         Time + 
+                         Place + 
+                         HasFire + 
+                         Environment + 
+                         EnergyAbsorption + 
+                         CrushedFuselage + 
+                         RestraintIntact, 
+                       family = binomial(link = "logit"), 
+                       data = accident_data)
+
+summary(glm_binary_full)
+
+# 3. Stepwise Selection to find the best model
+glm_binary_step <- step(glm_binary_full, direction = "both",trace = FALSE)
+summary(glm_binary_step)
+
+anova(glm_binary_full, test = "Chisq")
+
+anova(glm_binary_step, test = "Chisq")
+
+
 ```
 
 # Analysis

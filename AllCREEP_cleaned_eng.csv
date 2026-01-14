@@ -46,3 +46,4 @@ aeroflot,6502,6,0,18,7,0,21,8,0,16,10,0,26,11,0,29,,landing,day,airport,no-fire,
 azerbaijan,8243,0,0,19,9,0,10,22,0,3,1,0,23,30,0,9,,landing,day,airport,fire,1,0,dangerous,gear
 aires,8250,35,9,0,21,6,2,38,9,0,46,12,1,47,12,1,w,landing,night,airport,fire,1,1,dangerous,gear
 luxair,9642,0,0,4,0,0,6,1,0,8,0,0,6,1,0,12,w,landing,day,outside,no-fire,1,0,dangerous,gear
+conviasa,2350,2,0,10,15,0,1,17,0,1,9,0,11,23,0,1,fr,takeoff,day,outside,fire,1,0,dangerous,nogear
