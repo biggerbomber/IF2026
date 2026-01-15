@@ -116,9 +116,8 @@ We collected the additional information about the accident details from the avia
 Let's take a look at the structure and meaning of the data we gathered:
 
 ```{r load data}
-accident_data <- read.csv("AllCREEP_cleaned_eng.csv")
+accident_data <- read.csv("data/All_Plane_Crash_Data.csv")
 str(accident_data)
-
 ```
 
 ## Data Points and Variables 
