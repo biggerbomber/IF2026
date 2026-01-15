@@ -13,8 +13,8 @@ editor_options:
     wrap: 80
   chunk_output_type: console
 abstract: |
-  Despite the high safety standards of the aviation industry, the question of whether seat selection influences survival chances during an accident remains a popular topic of debate. While media outlets often claim a statistical advantage for the rear section of the aircraft, these claims rarely rely on rigorous inferential statistics. This study investigates the relationship between seating location and mortality rates using data from 48 commercial aircraft accidents (1977-2019) involving significant fatalities.
-  We analyzed mortality rates across different aircraft sections (thirds and halves) and examined survivability factors including fire, restraint integrity, and energy absorption. Although preliminary visual analysis suggested a trend favoring the rear section, Kruskal-Wallis tests revealed no statistically significant difference in mortality rates between sections (p>0.05). Further analysis using Generalized Linear Models (Quasibinomial family) demonstrated that specific accident dynamics influence sections differently: the presence of fire and restraint failure significantly impact the front section, while energy absorption mechanisms (landing gear status) are critical for the middle section. We conclude that survivability is determined by accident-specific structural and environmental factors rather than seat location alone.
+  Despite the high safety standards of the aviation industry, the question of whether seat selection influences survival chances during an accident remains a popular topic of debate. While media outlets often claim a statistical advantage for a specific section of the aircraft, these claims rarely rely on rigorous inferential statistics. This study investigates the relationship between seating location and mortality rates using data from 48 commercial aircraft accidents.
+  We analyzed mortality rates across different aircraft sections (thirds and halves) and examined survivability factors including fire, restraint integrity, and energy absorption. Although preliminary visual analysis suggested a trend favoring the rear section, Kruskal-Wallis tests revealed no statistically significant difference in mortality rates between sections (p-value>0.05). Further analysis using Generalized Linear Models with the Quasibinomial family demonstrated that specific accident dynamics influence sections differently: the presence of fire and restraint failure impact the front section, while energy absorption mechanisms (landing gear status) impact the middle section. We conclude that survivability is not determined by seat location, but is influenced by accident-specific structural and environmental factors.
 ---
 
 ```{r setup, include=FALSE}
@@ -60,7 +60,7 @@ Before starting the analysis, the meaning of some terms must be clarified
 
 ## Literature
 
-While we found no scientific article about this issue, there are many news articles that claim to have conducted "statistical analysis" on aircraft accident data to find which area is the safest in case of a crash. We now list some of their findings : 
+While we found no scientific article about this issue, there are many news articles that claim to have conducted a "statistical analysis" on aircraft accident data to find which area is the safest in case of a crash. We now list some of their findings : 
 
  - *Time Article*[^2] : "Statistics show that the middle seats in the rear of an aircraft historically have the highest survival rates. [...] The analysis found that the seats in the back third of the aircraft had a 32% fatality rate, compared with 39% in the middle third and 38% in the front third.". This article was written in June 2015.
  
@@ -75,8 +75,8 @@ section fared the best with a 49% survivability rate. In three out of the 20 cra
 
  - *Allianz Report - University of Greenwich*[^6] :  the University of Greenwich studied 105 airline accidents worldwide, and this study concluded that the safest seat on an aircraft is in the one on the aisle nearest the exit, in the front of the aircraft. This seat has a survivability rate of 65% whereas a passenger seated in the rear section only has a 53% survivability rate. Additionally, any seat in the aisle near an exit offers a greater chance of survivability. When seated more than six rows from an exit “the chances of perishing far outweigh those of surviving”
  
- // SUMMARY OF ALL, reason why we decided to conduct this study : not percentages, but statistical evidence. 
- 
+We can see that they portray the reality in different ways. We wanted to conduct a similar analysis using statistical tools so that we can get statistical guarantees on the results we get.  
+
 ## Perspective 
 
 We are studying if the seating in an airplane has an effect on the survivability of an aircraft accident. To study this, we need to look at all aircraft accidents, then rule out the accidents where every passenger survived, and every accident in which every passenger died. This is an extremely narrow data set of accidents. Of these accidents, we gathered the seatings arrangements and survivor seating maps for 48 crashes. 
@@ -100,9 +100,7 @@ We examined aircraft accidents where there 3 or more deaths, and more than 30 pe
 
 The final reports don't always feature a seat injury map built in a way that allows us to conduct a statistical analysis on it. Sometimes, the map is not even present and the only information is a rough idea of the location of the survivors and deaths. This is an extract from the final report of eastern airlines flight 401 :
 
- - *"Most of the survivors were located in the vicinity of the cockpit area, the mid-cabin service area, the overwing area, and the empennage section; these sections were located at the far end of the wreckage path. In contrast, most fatalities were found in the center of the crash path. Crushing injuries to the chest were the predominant causes of death."*
-
-//aggiungere link 
+ - *"Most of the survivors were located in the vicinity of the cockpit area, the mid-cabin service area, the overwing area, and the empennage section; these sections were located at the far end of the wreckage path. In contrast, most fatalities were found in the center of the crash path. Crushing injuries to the chest were the predominant causes of death."*[^10]
 
 We know that 101 people died in this accident and that 75 survived, but we can't assign a precise mortality rate to each section, so we had to discard this accident from our data sample. 
 
@@ -152,8 +150,6 @@ The format is the following : `X{section}.{part}.{type of injury}`, where sectio
 
 - **EnergyAbsorption** : indicates if the landing gear was extended and if it absorbed a significant amount of impact forces before collapsing. If not, the airplane either hit the ground wit the gear retracted or hit the ground nose-first or tail-first, causing the impact forces to be absorbed by the passenger cabin. Possible values are "gear" or "nogear"
 
-// fix nogear --> no-gear
-// remove dataorigin
 
 ## Mortality Rates
 
@@ -378,8 +374,7 @@ kruskal_result_half
 
 The Kruskal-Wallis tests returned p-values of 0.1811 (for thirds) and 0.371 (for halves). In both cases, the p-value is above the standard significance level of 0.05. Therefore, we cannot reject the null hypothesis : despite the visual trends observed in the boxplots, our statistical analysis indicates that there is no significant difference in mortality rates between the different sections of the aircraft, no matter if is divided into thirds or halves. 
 The trend that we observed in the boxplots could be caused just by random variation in the data, and not by a real effect of the seating location on mortality rates. There could also be a problem of low statistical power due to the small sample size and/or the high variability of the data observed in the histograms.
-
-//Open questions : can we calculate the power? 
+ 
 
 ## Modelling the mortality rates
 
@@ -470,7 +465,7 @@ Interesingly, "HasFire" is not significant here and "RestraintIntact" is only ma
 # Conclusion
 
 During this analysis, we focused on determining if the seating location in an aircraft has a significant effect on the mortality rates in the event of an accident. 
-The Preliminary analysis was promising, with seemingly clear visual trends in the boxplot and different correlations pattern between the sections.
+The Preliminary analysis was promising, with seemingly clear visual trends in the boxplot and different correlation patterns between the sections.
 However, using a statistical test coherent with the data distribution (Kruskal-Wallis test), we found no significant difference in mortality rates between the different sections of the aircraft, whether divided into thirds or halves.
 
 On the other hand, our modeling efforts using Generalized Linear Models with a quasibinomial family revealed that certain factors significantly influence mortality rates, and they are different for each section of the aircraft.
@@ -482,14 +477,14 @@ On the other hand, our modeling efforts using Generalized Linear Models with a q
 | Rear Third    | None                     |  |
 | Total         | EnergyAbsorption=nogear         | 0.0295 |
 
-These findings suggest that while seating location alone does not significantly impact mortality rates, other factors related to the nature of the accident and aircraft design do play a important role in survivability.
-Unfortunately, may of these factors are outside the control of passengers, and their significance is just and indication for improvements in aircraft safety design and emergency procedures.
+These findings suggest that while seating location alone does not significantly impact mortality rates, other factors related to the accident do play an important role in survivability.
+Unfortunately, may of these factors are outside the control of passengers, and their significance is just an indication for improvements in aircraft safety.
 
 So, ***Does your seat matter***?
 
-Not significantly, the real things that matter is the design of the aircraft, the training of the cabin crew and pilots, and the effectiveness of the emergency procedures and response, because in the event of an accident, these are the factors that will most likely determine your chances of survival.
+Not significantly. The real things that matter are the the many layers of redundancy, safety procedures and checklists that the industry is so well known for implementing and upholding with attention. It is also the design of the aircraft, the training of the cabin crew and pilots, the effectiveness of the emergency procedures and the work of first responders. These are the reasons why we see so few accidents in the first place, and even in the event of an accident, these are the factors that will most likely determine your chances of survival.
 
-# Links
+
 
 [^1]: [https://flyfright.com/plane-crash-statistics/]
 [^2]: [https://time.com/3934663/safest-seat-airplane/]
@@ -500,3 +495,4 @@ Not significantly, the real things that matter is the design of the aircraft, th
 [^7]: [https://flyfright.com/plane-crash-statistics/#tve-jump-18c020d9166]
 [^8]: [https://aviation-safety.net/asndb/]
 [^9]: [https://en.wikipedia.org/wiki/List_of_accidents_and_incidents_involving_commercial_aircraft]
+[^10]: [http://libraryonline.erau.edu/online-full-text/ntsb/aircraft-accident-reports/AAR73-14.pdf]
