@@ -12,6 +12,9 @@ editor_options:
   markdown: 
     wrap: 80
   chunk_output_type: console
+abstract: |
+  Despite the high safety standards of the aviation industry, the question of whether seat selection influences survival chances during an accident remains a popular topic of debate. While media outlets often claim a statistical advantage for the rear section of the aircraft, these claims rarely rely on rigorous inferential statistics. This study investigates the relationship between seating location and mortality rates using data from 48 commercial aircraft accidents (1977-2019) involving significant fatalities.
+  We analyzed mortality rates across different aircraft sections (thirds and halves) and examined survivability factors including fire, restraint integrity, and energy absorption. Although preliminary visual analysis suggested a trend favoring the rear section, Kruskal-Wallis tests revealed no statistically significant difference in mortality rates between sections (p>0.05). Further analysis using Generalized Linear Models (Quasibinomial family) demonstrated that specific accident dynamics influence sections differently: the presence of fire and restraint failure significantly impact the front section, while energy absorption mechanisms (landing gear status) are critical for the middle section. We conclude that survivability is determined by accident-specific structural and environmental factors rather than seat location alone.
 ---
 
 ```{r setup, include=FALSE}
