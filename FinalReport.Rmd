@@ -20,8 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-The Aviation industry is one of the safest in the world. The systems that it has put in place to learn lessons from accidents and make sure they never happen again is well-established and highly regarded. This has made traveling by plane the safest way to travel. 
-https://flyfright.com/plane-crash-statistics/#:~:text=Based%20on%20statistics%20from%202015,unharmed%2C%20injured%2C%20or%20killed
+The Aviation industry is one of the safest in the world. The systems that it has put in place to learn lessons from accidents and make sure they never happen again is well-established and highly regarded. This has made traveling by plane (the safest way to travel)[^1].
 
 But perhaps due to these high safety standards, when an aircraft accident happens it makes headlines all over the world. Anxious passengers fear it's going to happen to them as well and they can't help but ask themselves if there is something they could do to have a safer flight. 
 
@@ -59,28 +58,18 @@ Before starting the analysis, the meaning of some terms must be clarified
 
 While we found no scientific article about this issue, there are many news articles that claim to have conducted "statistical analysis" on aircraft accident data to find which area is the safest in case of a crash. We now list some of their findings : 
 
- - *Time Article* : "Statistics show that the middle seats in the rear of an aircraft historically have the highest survival rates. [...] The analysis found that the seats in the back third of the aircraft had a 32% fatality rate, compared with 39% in the middle third and 38% in the front third.". This article was written in June 2015.
+ - *Time Article*[^2] : "Statistics show that the middle seats in the rear of an aircraft historically have the highest survival rates. [...] The analysis found that the seats in the back third of the aircraft had a 32% fatality rate, compared with 39% in the middle third and 38% in the front third.". This article was written in June 2015.
  
- - https://time.com/3934663/safest-seat-airplane/
+ - *Reuters Article*[^3] :  "Data reveals civil aviation’s most astonishing, exceptional survivals—and shows no seat is reliably safe." 
  
- - *Reuters Article* :  "Data reveals civil aviation’s most astonishing, exceptional survivals—and shows no seat is reliably safe." 
+ - *Aeroclass Article*[^4] : "An analysis of several accidents reveals that:The seats in the back third of the aircraft have a fatality rate of 32%. The seats in the middle third of the plane have a fatality rate of 39%. The seats in the front third have a fatality rate of 38%. [...] The crash data indicates that the front third and middle third of the plane have higher fatality rates than the back third of the plane." This article was written in November 2017.
  
- - https://www.reuters.com/graphics/AVIATION-SAFETY/lgpdaagabvo/
+ - *Wired Article*[^5] : "While no part of the plane may generally be the safest [...] Each airline emergency plays out differently, affecting different seats more than others each time." 
  
- - *Aeroclass Article* : "An analysis of several accidents reveals that:The seats in the back third of the aircraft have a fatality rate of 32%. The seats in the middle third of the plane have a fatality rate of 39%. The seats in the front third have a fatality rate of 38%. [...] The crash data indicates that the front third and middle third of the plane have higher fatality rates than the back third of the plane." This article was written in November 2017.
- 
- - https://www.aeroclass.org/the-safest-place-to-sit-on-a-plane/
- 
- - *Wired Article* : "While no part of the plane may generally be the safest [...] Each airline emergency plays out differently, affecting different seats more than others each time."
- 
- - https://www.wired.com/story/whats-the-safest-seat-on-an-airplane/
- 
- - *Allianz Report - Popular Mechanics* : Popular Mechanics also examined 20 accidents and calculated the survival rate in each of four sections of the aircraft. Its results found that in 11 of the 20 crashes, passengers in the rear of the aircraft had a better chance of survival. In seven of those 11 crashes favoring the rear of the aircraft they found the rear section was the only section with survivors. In five accidents the first class and business class
+ - *Allianz Report - Popular Mechanics*[^6] : Popular Mechanics also examined 20 accidents and calculated the survival rate in each of four sections of the aircraft. Its results found that in 11 of the 20 crashes, passengers in the rear of the aircraft had a better chance of survival. In seven of those 11 crashes favoring the rear of the aircraft they found the rear section was the only section with survivors. In five accidents the first class and business class
 section fared the best with a 49% survivability rate. In three out of the 20 crashes no one location had an advantage.
 
- - *Allianz Report - University of Greenwich* :  the University of Greenwich studied 105 airline accidents worldwide, and this study concluded that the safest seat on an aircraft is in the one on the aisle nearest the exit, in the front of the aircraft. This seat has a survivability rate of 65% whereas a passenger seated in the rear section only has a 53% survivability rate. Additionally, any seat in the aisle near an exit offers a greater chance of survivability. When seated more than six rows from an exit “the chances of perishing far outweigh those of surviving”
- 
- - https://www.allianz.com/content/dam/onemarketing/azcom/Allianz_com/migration/media/press/document/other/AGCS-Global-Aviation-Safety-Study-2014.pdf
+ - *Allianz Report - University of Greenwich*[^6] :  the University of Greenwich studied 105 airline accidents worldwide, and this study concluded that the safest seat on an aircraft is in the one on the aisle nearest the exit, in the front of the aircraft. This seat has a survivability rate of 65% whereas a passenger seated in the rear section only has a 53% survivability rate. Additionally, any seat in the aisle near an exit offers a greater chance of survivability. When seated more than six rows from an exit “the chances of perishing far outweigh those of surviving”
  
  
 ## Perspective 
@@ -89,8 +78,7 @@ We are studying if the seating in an airplane has an effect on the survivability
 
 If 47 crashes look like a lot, we should consider the greater perspective of air travel safety in general.
 
-https://flyfright.com/plane-crash-statistics/#tve-jump-18c020d9166
-reported these figures studying the US General aviation data between 2015 and 2020 : 
+We can get a clear picture of just how rare an accident is by looking into the US General aviation data between 2015 and 2020[^7] : 
  
  - $\frac{1}{260256}$ :  chance of boarding any flight and it being an accident flight
  
@@ -100,23 +88,26 @@ reported these figures studying the US General aviation data between 2015 and 20
  
 ## Data Gathering Process
 
-For this experiment, we found that there weren't already available datasets to get the accident seating maps.
+For this experiment, we found that there weren't any available datasets to get the accident seating maps from.
 
-//talk about the fact that in all major accidents either all die or all survive --> wikipedia list 
+We decided that we would gather the information from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident. The final report is the result of the investigation conducted by an aviation safety board. It is an official document where the results of the investigation into the cause of the accident is reported along with many other informations pertinent to the analysis that the investigators conducted. 
 
-//not all incidents feature a map. Not all incidents where people both survived and died were crashs (11A)
-// argue that we have a significative dataset
+We examined aircraft accidents where there were more than 3 deaths, and more than 30 people overall onboard to be able to divide the aircraft into proportions and study them. Of 597 accidents that happened from 1977 to 2019, we found 111 that met this criteria. Of these, we found seat injury maps for 47 of them. This was due to the kind of information contained in the final reports. 
 
-We decided that we would gather the information from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident. 
+The final reports don't always feature a seat injury map built in a way that allows us to conduct a ststistical analysis on it. Sometimes, the map is not even present and the only information is a rough idea of the location of the survivors and deaths. This is an extract from the final report of eastern airlines flight 401 :
 
-//What are FR and that they are official ; redacted by apposite agencies - only official document 
+"Most of the survivors were located in the vicinity of the cockpit area, the mid-cabin service area, the overwing area, and the empennage section; these sections were located at the far end of the wreckage path. In contrast, most fatalities were found in the center of the crash path. Crushing injuries to the chest were the predominant causes of death."
 
-//manually counted all seats, so the data is ours. PILOTS AND FA not included as they are not passengers
+We know that 101 people died in this accident and that 75 survived, but we have no way of knowing how to assign a precise percentage to each section, so we had to discard this accident from our data sample. 
 
-We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
-//not all aircraft have the same seating arrangements, little data --> 3 and 2 
+In some cases, only the locations of the deaths were marked, thus making a statistical analysis impossible since the total number of passengers per section was unknown. 
+
+Whenever a full seat x injury map was featured in the report, we calculated by hand the total passenger counts. We intentionally left out the cabin crew from our totals, since this analysis is focused on passengers. 
+
+We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft, as all aircraft are different and can't be compared seat by seat. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
+
+We collected the additional information about the accident details from the aviation safety network[^8] and from Wikipedia[^9]
  
-
 # Data Description
 
 Let's take a look at the structure and meaning of the data we gathered:
@@ -124,57 +115,23 @@ Let's take a look at the structure and meaning of the data we gathered:
 ```{r load data}
 accident_data <- read.csv("AllCREEP_cleaned_eng.csv")
 str(accident_data)
-#
-#> str(accident_data)
-#'data.frame':   47 obs. of  26 variables:
-# $ Airline          : chr  "singapore airlines" "british airtours" "british midland" "china airlines" ...
-# $ FlightNum        : int  6 28 92 120 123 129 140 148 191 204 ...
-# $ X1.third.minor   : int  17 36 0 0 0 4 0 0 0 3 ...
-# $ X1.third.major   : int  2 0 11 0 0 0 0 0 0 0 ...
-# $ X1.third.dead    : int  15 0 22 0 136 14 18 16 55 33 ...
-# $ X2.third.minor   : int  1 30 4 5 0 5 7 1 0 25 ...
-# $ X2.third.major   : int  15 0 30 0 0 0 0 0 8 0 ...
-# $ X2.third.dead    : int  64 16 13 8 214 60 139 34 51 1 ...
-# $ X3.third.minor   : int  26 10 0 5 36 24 0 8 10 29 ...
-# $ X3.third.major   : int  17 0 27 0 0 0 0 0 7 0 ...
-# $ X3.third.dead    : int  0 36 11 21 109 43 91 30 16 0 ...
-# $ X1.half.minor    : int  17 56 32 3 0 7 7 1 0 7 ...
-# $ X1.half.major    : int  3 0 0 0 0 0 0 0 1 0 ...
-# $ X1.half.dead     : int  41 8 34 6 226 23 95 36 79 35 ...
-# $ X2.half.minor    : int  26 20 39 7 4 26 0 7 10 46 ...
-# $ X2.half.major    : int  31 0 0 0 0 0 0 0 14 0 ...
-# $ X2.half.dead     : int  34 44 13 23 225 90 145 46 48 0 ...
-# $ DataOrigin       : chr  "w" "w" "w" "w" ...
-# $ PhaseOfFlight    : chr  "takeoff" "takeoff" "landing" "landing" ...
-# $ Time             : chr  "night" "day" "night" "day" ...
-# $ Place            : chr  "airport" "outside" "outside" "airport" ...
-# $ HasFire          : chr  "fire" "fire" "fire" "fire" ...
-# $ CrushedFuselage : int  1 1 1 1 1 1 1 1 1 1 ...
-# $ RestraintIntact : int  0 0 0 1 0 0 0 0 0 0 ...
-# $ Environment      : chr  "dangerous" "dangerous" "dangerous" "clear" ...
-# $ EnergyAbsorption: chr  "nogear" "nogear" "gear" "nogear" ...
-#> 
-#
+
 ```
 
 ## Data Points and Variables 
 
 The data consists of 47 observations (aircraft accidents) and 26 variables. They are the focus of our analysis.
 
-We want to remark that the data consists only of aircraft accidents where there was at least 1 survivor and at least 1 fatality, because the final goal was to compare mortality rates.
-
-// ... 
+We want to remark that the data consists only of aircraft accidents where there were at least 3 fatalities and more than 30 passengers onboard, because the final goal was to compare mortality rates. In this section we give more detail on the additional variables gathered for each accident 
 
 The variables consist of:
 
 - **Airline & FlightNum** : identifier of the aircraft accident. Useful to retrieve more information about the accident if needed. 
 
 - **X variables** : these variables represent the number and the type of injury (minor-none / serious / fatal) in each section of the airplane (Each third and each half). 
-//...
 The format is the following : `X{section}.{part}.{type of injury}`, where section is 1,2,3 for the thirds and 1,2 for the halves, part is "third" or "half", and type of injury is "minor", "major" or "dead".
 
 - **DataOrigin** : source of the data, either Wikipedia (W) or directly from the final report (FR) or other sources (empty).
-// Remove Column in the data 
 
 - **PhaseOfFlight** : phase of flight when the accident happened, The possible values are "takeoff" or "landing", landing includes emergency landings.
 
@@ -193,12 +150,12 @@ The format is the following : `X{section}.{part}.{type of injury}`, where sectio
 - **EnergyAbsorption** : indicates if the landing gear was extended and if it absorbed a significant amount of impact forces before collapsing. If not, the airplane either hit the ground wit the gear retracted or hit the ground nose-first or tail-first, causing the impact forces to be absorbed by the passenger cabin. Possible values are "gear" or "nogear"
 
 // fix nogear --> no-gear
+// remove dataorigin
 
 ## Mortality Rates
 
-To start the analysis, let's prepare the data by adding some useful variables, and transform some variables into a more manageable format.
-
-//...
+To start the analysis, let's preprocess the data by creating the mortality rates for each section. We first proceed to add the totals for each section, and then use it to generate the mortality rates. 
+We also transform the categorical variables into factors. 
 
 ```{r data preparation}
 # add a colum of # of passengers for each airplain section
@@ -233,10 +190,6 @@ accident_data <- within(accident_data, {
                           (X1.third.total + X2.third.total + X3.third.total)
 })
 ```
-
-What we see in these graphs is very interesting and significant. 
-
-In the first and second thirds we can see that in most cases, either most die or most survive. In the third third the distribution is much more even, except for the relatively high 0% mortality rate frequency. This is already a clue that the diversity is great and therefore 
 
 # Data Analysis
 
@@ -641,3 +594,15 @@ anova(glm_binary_step, test = "Chisq")
 # Results 
 
 # Conclusions
+
+# Links
+
+[^1]: [https://flyfright.com/plane-crash-statistics/]
+[^2]: [https://time.com/3934663/safest-seat-airplane/]
+[^3]: [https://www.reuters.com/graphics/AVIATION-SAFETY/lgpdaagabvo/]
+[^4]: [https://www.aeroclass.org/the-safest-place-to-sit-on-a-plane/]
+[^5]: [https://www.wired.com/story/whats-the-safest-seat-on-an-airplane/]
+[^6]: [https://www.allianz.com/content/dam/onemarketing/azcom/Allianz_com/migration/media/press/document/other/AGCS-Global-Aviation-Safety-Study-2014.pdf]
+[^7]: [https://flyfright.com/plane-crash-statistics/#tve-jump-18c020d9166]
+[^8]: [https://aviation-safety.net/asndb/]
+[^9]: [https://en.wikipedia.org/wiki/List_of_accidents_and_incidents_involving_commercial_aircraft]
