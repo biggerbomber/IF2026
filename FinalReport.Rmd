@@ -460,7 +460,17 @@ Interesingly, "HasFire" is not significant here and "RestraintIntact" is only ma
 **Total Mortality Rate** : "EnergyAbsorption" is statistically significant (p-value = 0.0295) with a positive coefficient for "nogear". This means that the absence of a clean, energy-absorbing landing, is highly correlated with higher overall mortality rates. 
 "HasFire" and "RestraintIntact" are marginally significant (p-values = 0.0989 and 0.0933 respectively), suggesting that they may have some effect on overall survivability, but the evidence is not strong enough to be conclusive.
 
-# Conclusions
+# Conclusion
+
+1) Mortality rate not signifantly difference
+
+2) Variable correlations
+
+3) Support articles that found no significant correlations. 
+
+# Abstract
+
+
 
 # Links
 
