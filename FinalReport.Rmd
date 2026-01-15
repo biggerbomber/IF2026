@@ -32,27 +32,26 @@ We are going to try to answer this question using statistics.
 
 Before starting the analysis, the meaning of some terms must be clarified 
 
- - Flight : A flight a trip made by an aircraft that connects two airports. It is identified by a number. (Example : AirFrance 225 is the name of the regular service from New Deli to Paris ) 
+ - **Flight** : A flight a trip made by an aircraft that connects two airports. It is identified by a number. (Example : AirFrance 225 is the name of the regular service from New Deli to Paris ) 
  
- - Accident : An Accident is an occurrence where a person is fatally or seriously injured, the aircraft sustains significant structural damage, or the aircraft goes missing.
+ - **Accident** : An Accident is an occurrence where a person is fatally or seriously injured, the aircraft sustains significant structural damage, or the aircraft goes missing.
  
- - Incident : An incident is a dangerous situation where no one is seriously hurt and the plane isn't badly damaged.
+ - **Incident** : An incident is a dangerous situation where no one is seriously hurt and the plane isn't badly damaged.
  
- - Crash : A crash is a type of accident where an aircraft strikes the ground, water, or an obstacle with enough force to cause severe damage or total destruction.
+ - **Crash** : A crash is a type of accident where an aircraft strikes the ground, water, or an obstacle with enough force to cause severe damage or total destruction.
  
- - Accident flight : when a serious accident happens on a flight, usually the companies save the flight number to refer to that flight, and change the flight number for new flights. (Example : Air France 447 was the name of the connection from Rio to Paris, after the 2009 accident the flight became Air France 445)
+ - **Accident flight** : when a serious accident happens on a flight, usually the companies save the flight number to refer to that flight, and change the flight number for new flights. (Example : Air France 447 was the name of the connection from Rio to Paris, after the 2009 accident the flight became Air France 445)
  
- - Serious injury : Any injury requiring more than 48 hours of hospitalization or involving broken bones (other than fingers/toes)
+ - **Serious injury** : Any injury requiring more than 48 hours of hospitalization or involving broken bones (other than fingers/toes)
  
- - Survivability : an accident is defined as survivable if the forces are within human limits and if the structure remained substantially intact 
+ - **Survivability** : an accident is defined as survivable if the forces are within human limits and if the structure remained substantially intact 
  
- - CREEP factors : factors that influence the survivability of an accident. They are
-    - Container : amount of cabin deformation 
-    - Restraints : analysis of the seating structure
-    - Environment : presence of lethal contact points
-    - Energy Absorption : G-load mitigation by fuselarge or landing gear
-    - Post Crash : Other factors (We considered : airport proximity, presence of fire, daytime, phase of flight)
-
+ - **CREEP factors** : factors that influence the survivability of an accident. They are
+    - *Container* : amount of cabin deformation 
+    - *Restraints* : analysis of the seating structure
+    - *Environment* : presence of lethal contact points
+    - *Energy Absorption* : G-load mitigation by fuselarge or landing gear
+    - *Post Crash* : Other factors (We considered : airport proximity, presence of fire, daytime, phase of flight)
 
 ## Literature
 
@@ -332,10 +331,6 @@ corrplot(corr_res, method = "ellipse",
 
 As we can see from both the scatterplot matrix and the correlation plot, there is a strong positive correlation between the mortality rates of the different sections and the total mortality rate. Also there are no evident asymmetries on the color distribution.
 We notice that the correlation is weakest between the front third and the rear third: in fact, the more 2 sections are distant physically, the less correlated they are in this data; also similar distance leads to similar correlation values:
-```{r correlation values}
-## compare front third - middle third correlation with middle third - rear third correlation
-corr_res
-```
 
 The correlation with the total mortality rate is very high for all sections, indicating that when the total mortality rate is high, all sections tend to have high mortality rates, which is expected.
 
@@ -405,56 +400,31 @@ The estimated coefficients remain the same as a standard logistic regression, bu
 
 ### GLM models and results
 ```{r test glm}
-glm_third_1 <- glm(cbind(X1.third.dead, X1.third.total - X1.third.dead) ~ 
-                      PhaseOfFlight + 
-                     Time + 
-                     Place + 
-                     HasFire + 
-                     Environment + 
-                     EnergyAbsorption + 
-                     CrushedFuselage + 
-                     RestraintIntact, 
+
+predictors <- ~ PhaseOfFlight + Time + Place + HasFire + Environment + 
+                EnergyAbsorption + CrushedFuselage + RestraintIntact
+
+
+glm_third_1 <- glm(update(predictors, 
+                          cbind(X1.third.dead, X1.third.total - X1.third.dead) ~ .),
                    family = quasibinomial(link = "logit"),
                    data = accident_data)
 
-glm_third_2 <- glm(cbind(X2.third.dead, X2.third.total - X2.third.dead) ~ 
-                     PhaseOfFlight + 
-                     Time + 
-                     Place + 
-                     HasFire + 
-                     Environment + 
-                     EnergyAbsorption + 
-                     CrushedFuselage + 
-                     RestraintIntact, 
+glm_third_2 <- glm(update(predictors, 
+                          cbind(X2.third.dead, X2.third.total - X2.third.dead) ~ .),
                    family = quasibinomial(link = "logit"),
                    data = accident_data)
 
-glm_third_3 <- glm(cbind(X3.third.dead, X3.third.total - X3.third.dead) ~ 
-                     PhaseOfFlight + 
-                     Time + 
-                     Place + 
-                     HasFire + 
-                     Environment + 
-                     EnergyAbsorption + 
-                     CrushedFuselage + 
-                     RestraintIntact, 
+glm_third_3 <- glm(update(predictors, 
+                          cbind(X3.third.dead, X3.third.total - X3.third.dead) ~ .),
                    family = quasibinomial(link = "logit"),
                    data = accident_data)
 
-glm_total <- glm(cbind(X1.third.dead + X2.third.dead + X3.third.dead, 
+glm_total <- glm(update( predictors, cbind(X1.third.dead + X2.third.dead + X3.third.dead, 
                        X1.third.total + X2.third.total + X3.third.total - 
-                         (X1.third.dead + X2.third.dead + X3.third.dead)) ~ 
-                   PhaseOfFlight + 
-                   Time + 
-                   Place + 
-                   HasFire + 
-                   Environment + 
-                   EnergyAbsorption + 
-                   CrushedFuselage + 
-                   RestraintIntact, 
-                 family = quasibinomial(link = "logit"),
-                 data = accident_data)
-
+                         (X1.third.dead + X2.third.dead + X3.third.dead)) ~ .),
+                   family = quasibinomial(link = "logit"),
+                   data = accident_data)
 ```
 
 We also modeled the total mortality rate, to see if there are variables that affect the overall survivability of the accident, regardless of seating location.
@@ -478,120 +448,6 @@ We have some statistically significant results in some of the models, let's anal
 
 **Total Mortality Rate** : "EnergyAbsorption" is statistically significant (p-value = 0.0295) with a positive coefficient for "nogear". This means that the absence of a clean, energy-absorbing landing, is highly correlated with higher overall mortality rates. 
 "HasFire" and "RestraintIntact" are marginally significant (p-values = 0.0989 and 0.0933 respectively), suggesting that they may have some effect on overall survivability, but the evidence is not strong enough to be conclusive.
-
-
-
-```{r glm summaries}
-anova(glm_third_1, test = "Chisq")
-anova(glm_third_2, test = "Chisq")
-anova(glm_third_3, test = "Chisq")
-anova(glm_total, test = "Chisq")
-
-
-
-# Function to calculate Deviance Explained
-calc_strength <- function(model, name) {
-  # Extract deviances
-  null_dev <- model$null.deviance
-  resid_dev <- model$deviance
-  
-  # Calculate Percentage Explained
-  d2 <- 1 - (resid_dev / null_dev)
-  
-  # Return formatted result
-  return(data.frame(
-    Section = name,
-    Null_Deviance = round(null_dev, 1),
-    Resid_Deviance = round(resid_dev, 1),
-    Deviance_Explained = paste0(round(d2 * 100, 1), "%")
-  ))
-}
-
-# Run for all your models
-strength_front  <- calc_strength(glm_third_1, "Front")
-strength_middle <- calc_strength(glm_third_2, "Middle")
-strength_rear   <- calc_strength(glm_third_3, "Rear")
-strength_total  <- calc_strength(glm_total,   "Total")
-
-# Combine and View
-model_power <- rbind(strength_front, strength_middle, strength_rear, strength_total)
-print(model_power)
-
-
-if(!require(car)) install.packages("car")
-library(car)
-
-# 2. Run Type II ANOVA on your models
-# We use test="F" because of the quasibinomial family (estimated dispersion)
-
-cat("--- Type II ANOVA: Front Section ---\n")
-Anova(glm_third_1, type = "II", test = "F")
-
-cat("\n--- Type II ANOVA: Middle Section ---\n")
-Anova(glm_third_2, type = "II", test = "F")
-
-cat("\n--- Type II ANOVA: Rear Section ---\n")
-Anova(glm_third_3, type = "II", test = "F")
-
-cat("\n--- Type II ANOVA: Total Aircraft ---\n")
-Anova(glm_total, type = "II", test = "F")
-```
-
-
-```{r}
-
-summary(accident_data)
-
-
-
-# 1. Create the Binary Target (0 = Mostly Survived, 1 = Mostly Died)
-# We calculate the total rate first to ensure we capture the whole plane
-accident_data$TotalPassengers <- accident_data$X1.third.total + 
-                                 accident_data$X2.third.total + 
-                                 accident_data$X3.third.total
-
-accident_data$TotalDeaths     <- accident_data$X1.third.dead + 
-                                 accident_data$X2.third.dead + 
-                                 accident_data$X3.third.dead
-
-# Calculate Rate
-accident_data$GlobalRate <- accident_data$TotalDeaths / accident_data$TotalPassengers
-
-# Create Binary Variable (Split at 50%)
-accident_data$FatalCrash <- ifelse(accident_data$GlobalRate > 0.50, 1, 0)
-
-# Check the split (Should be roughly balanced)
-table(accident_data$FatalCrash)
-
-
-#2. Run the GLM with ALL predictors
-glm_binary_full <- glm(FatalCrash ~ PhaseOfFlight + 
-                         Time + 
-                         Place + 
-                         HasFire + 
-                         Environment + 
-                         EnergyAbsorption + 
-                         CrushedFuselage + 
-                         RestraintIntact, 
-                       family = binomial(link = "logit"), 
-                       data = accident_data)
-
-summary(glm_binary_full)
-
-# 3. Stepwise Selection to find the best model
-glm_binary_step <- step(glm_binary_full, direction = "both",trace = FALSE)
-summary(glm_binary_step)
-
-anova(glm_binary_full, test = "Chisq")
-
-anova(glm_binary_step, test = "Chisq")
-
-
-```
-
-# Analysis
-
-# Results 
 
 # Conclusions
 
