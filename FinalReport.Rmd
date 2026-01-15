@@ -287,51 +287,54 @@ What we can see is that the data is more concentrated at both ends of the mortal
 Since the mortality rates are from the same accidents, it is possible that there is some correlation between them.
 To visualize this, we can create a scatterplot matrix of the mortality rates of the different sections. We will also color the points based on the total mortality rate of the accident, to se if there is some pattern.
 
-```{r scatterplot matrix, fig.height=8, fig.width=8, echo=FALSE}
+```{r test ,out.width="50%", fig.show="hold"}
 library(corrplot)
 
-# 1. Setup Data
-correlation_matrix <- data.frame(
+data_thirds <- data.frame(
   Front_Third = accident_data$X1.third.mortality.rate,
   Middle_Third = accident_data$X2.third.mortality.rate,
   Rear_Third = accident_data$X3.third.mortality.rate,
+  Total_Mortality_Rate = accident_data$Total.mortality.rate
+)
+
+data_halves <- data.frame(
   Front_Half = accident_data$X1.half.mortality.rate,
   Rear_Half = accident_data$X2.half.mortality.rate,
   Total_Mortality_Rate = accident_data$Total.mortality.rate
 )
 
-# 2. Create the Color Gradient Logic
-# Create a palette generator that goes from Green -> Red
+# Create a color palette from green to red
 rbPal <- colorRampPalette(c("green", "red"))
 
-# Map the Total_Mortality_Rate variable to 100 bins (shades of color)
-# 'cut' divides the numeric range into intervals, returning the index (1-100)
-# We use that index to pick the specific color from rbPal
-point_colors <- rbPal(100)[as.numeric(cut(correlation_matrix$Total_Mortality_Rate, breaks = 100))]
+# Generate colors based on Total_Mortality_Rate
+# We can use the Total from accident_data directly to ensure consistent coloring
+point_colors <- rbPal(100)[as.numeric(cut(accident_data$Total.mortality.rate, breaks = 100))]
 
-# 3. Plot
-scatterplot_matrix <- function(data) {
+
+# Helper function for Scatterplots
+plot_my_scatter <- function(data, title) {
   pairs(data, 
-        main = "Scatterplot Matrix of Mortality Rates",
+        main = title,
         pch = 19, 
-        # Pass the vector of colors we created
         col = point_colors,
-        lower.panel = NULL) 
+        lower.panel = NULL)
 }
 
-scatterplot_matrix(correlation_matrix)
+# Helper function for Correlation Plots
+plot_my_corr <- function(data, title) {
+  corr_res <- cor(data, use = "complete.obs")
+  corrplot(corr_res, method = "ellipse", 
+           title = title,
+           mar = c(0,0,2,0), 
+           type = "upper")
+}
+
+plot_my_scatter(data_thirds, "Scatterplot Matrix: Thirds")
+plot_my_corr(data_thirds, "Correlation Matrix: Thirds")
+
+plot_my_scatter(data_halves, "Scatterplot Matrix: Halves")
+plot_my_corr(data_halves, "Correlation Matrix: Halves")
 ```
-
-```{r correlation plot, fig.height=6, fig.width=6, echo=FALSE}
-
-corr_res <- cor(correlation_matrix, use = "complete.obs")
-corrplot(corr_res, method = "ellipse", 
-         title = "Correlation Matrix of Mortality Rates",
-         mar = c(0,0,1,0),
-         type = "upper")
-```
-
-// SEPARATE THIRDS FROM HALVES 
 
 As we can see from both the scatterplot matrix and the correlation plot, there is a strong positive correlation between the mortality rates of the different sections and the total mortality rate. Also there are no evident asymmetries on the color distribution.
 The correlation with the total mortality rate is very high for all sections, indicating that when the total mortality rate is high, all sections tend to have high mortality rates, which is expected, as the increase of mortality rate in a section also leads to the increase of the total mortality rate.
@@ -410,6 +413,7 @@ The estimated coefficients remain the same as a standard logistic regression, bu
 ### GLM models and results
 
 We fit GLMs using the mortality rate as response and our additional variables as covariates, one for each section. We also modeled the total mortality rate, to see if there are variables that affect the overall survivability of the accident, regardless of seating location.
+We choose to study only the thirds, since they give a more granular view of the aircraft sections, and they where the most promising in the preliminary analysis.
 
 ```{r test glm}
 
@@ -462,15 +466,25 @@ Interesingly, "HasFire" is not significant here and "RestraintIntact" is only ma
 
 # Conclusion
 
-1) Mortality rate not signifantly difference
+During this analysis, we focused on determining if the seating location in an aircraft has a significant effect on the mortality rates in the event of an accident. 
+The Preliminary analysis was promising, with seemingly clear visual trends in the boxplot and different correlations pattern between the sections.
+However, using a statistical test coherent with the data distribution (Kruskal-Wallis test), we found no significant difference in mortality rates between the different sections of the aircraft, whether divided into thirds or halves.
 
-2) Variable correlations
+On the other hand, our modeling efforts using Generalized Linear Models with a quasibinomial family revealed that certain factors significantly influence mortality rates, and they are different for each section of the aircraft.
 
-3) Support articles that found no significant correlations. 
+| Section       | Significant Variables | p-values |
+| :---          | ---:                   | ---:                   |
+| Front Third   | HasFire=no-fire, RestraintIntact=1 | 0.0482, 0.0441 |
+| Middle Third  | EnergyAbsorption=nogear         | 0.0207 |
+| Rear Third    | None                     |  |
+| Total         | EnergyAbsorption=nogear         | 0.0295 |
 
-# Abstract
+These findings suggest that while seating location alone does not significantly impact mortality rates, other factors related to the nature of the accident and aircraft design do play a important role in survivability.
+Unfortunately, may of these factors are outside the control of passengers, and their significance is just and indication for improvements in aircraft safety design and emergency procedures.
 
+So, ***Does your seat matter***?
 
+Not significantly, the real things that matter is the design of the aircraft, the training of the cabin crew and pilots, and the effectiveness of the emergency procedures and response, because in the event of an accident, these are the factors that will most likely determine your chances of survival.
 
 # Links
 
