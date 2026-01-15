@@ -20,11 +20,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-The Aviation industry is one of the safest in the world. The systems that it has put in place to learn lessons from accidents and make sure they never happen again is well-established and highly regarded. This has made traveling by plane (the safest way to travel)[^1].
+The Aviation industry is one of the safest in the world. The systems that it has put in place to learn lessons from accidents and make sure they never happen again is well-established and highly regarded. This has made traveling by plane the safest way to travel[^1].
 
 But perhaps due to these high safety standards, when an aircraft accident happens it makes headlines all over the world. Anxious passengers fear it's going to happen to them as well and they can't help but ask themselves if there is something they could do to have a safer flight. 
 
-One of the most frequent question that gets asked is : is there a part of the plane that is "safer" than other parts? Can the seating location make a difference in an accident? 
+One of the most frequent question that gets asked is : is there a part of the plane that is "safer" than other parts? Does your seat matter? 
 
 We are going to try to answer this question using statistics.
 
@@ -32,7 +32,7 @@ We are going to try to answer this question using statistics.
 
 Before starting the analysis, the meaning of some terms must be clarified 
 
- - **Flight** : A flight a trip made by an aircraft that connects two airports. It is identified by a number. (Example : AirFrance 225 is the name of the regular service from New Deli to Paris ) 
+ - **Flight** : A flight is a trip made by an aircraft that connects two airports. It is identified by a number. (Example : AirFrance 225 is the name of the regular service from New Deli to Paris ) 
  
  - **Accident** : An Accident is an occurrence where a person is fatally or seriously injured, the aircraft sustains significant structural damage, or the aircraft goes missing.
  
@@ -41,6 +41,8 @@ Before starting the analysis, the meaning of some terms must be clarified
  - **Crash** : A crash is a type of accident where an aircraft strikes the ground, water, or an obstacle with enough force to cause severe damage or total destruction.
  
  - **Accident flight** : when a serious accident happens on a flight, usually the companies save the flight number to refer to that flight, and change the flight number for new flights. (Example : Air France 447 was the name of the connection from Rio to Paris, after the 2009 accident the flight became Air France 445)
+ 
+ - **Final Report** : The final report is the result of the investigation conducted by an aviation safety board. It is an official document where the results of the investigation into the cause of the accident are reported along with many other informations pertinent to the analysis that the investigators conducted. 
  
  - **Serious injury** : Any injury requiring more than 48 hours of hospitalization or involving broken bones (other than fingers/toes)
  
@@ -65,17 +67,18 @@ While we found no scientific article about this issue, there are many news artic
  
  - *Wired Article*[^5] : "While no part of the plane may generally be the safest [...] Each airline emergency plays out differently, affecting different seats more than others each time." 
  
- - *Allianz Report - Popular Mechanics*[^6] : Popular Mechanics also examined 20 accidents and calculated the survival rate in each of four sections of the aircraft. Its results found that in 11 of the 20 crashes, passengers in the rear of the aircraft had a better chance of survival. In seven of those 11 crashes favoring the rear of the aircraft they found the rear section was the only section with survivors. In five accidents the first class and business class
-section fared the best with a 49% survivability rate. In three out of the 20 crashes no one location had an advantage.
+ - *Allianz Report - Popular Mechanics*[^6] : Popular Mechanics also examined 20 accidents and calculated the survival rate in each of four sections of the aircraft. Its results found that in 11 of the 20 crashes, passengers in the rear of the aircraft had a better chance of survival. In seven of those 11 crashes they found the rear section was the only section with survivors. In five accidents the first class and business class
+section fared the best with a 49% survivability rate. In three out of the 20 crashes no location had an advantage.
 
  - *Allianz Report - University of Greenwich*[^6] :  the University of Greenwich studied 105 airline accidents worldwide, and this study concluded that the safest seat on an aircraft is in the one on the aisle nearest the exit, in the front of the aircraft. This seat has a survivability rate of 65% whereas a passenger seated in the rear section only has a 53% survivability rate. Additionally, any seat in the aisle near an exit offers a greater chance of survivability. When seated more than six rows from an exit “the chances of perishing far outweigh those of surviving”
  
+ // SUMMARY OF ALL, reason why we decided to conduct this study : not percentages, but statistical evidence. 
  
 ## Perspective 
 
-We are studying if the seating in an airplane has an effect on the survivability of an aircraft accident. To study this, we need to look at all aircraft accidents, then rule out the accidents where every passenger survived, and every accident in which every passenger died. This is an extremely narrow data set of accidents. Of these accidents, we gathered the seatings arrangements and survivor seating maps for 47 crashes. 
+We are studying if the seating in an airplane has an effect on the survivability of an aircraft accident. To study this, we need to look at all aircraft accidents, then rule out the accidents where every passenger survived, and every accident in which every passenger died. This is an extremely narrow data set of accidents. Of these accidents, we gathered the seatings arrangements and survivor seating maps for 48 crashes. 
 
-If 47 crashes look like a lot, we should consider the greater perspective of air travel safety in general.
+If 48 crashes look like a lot, we should consider the greater perspective of air travel safety in general.
 
 We can get a clear picture of just how rare an accident is by looking into the US General aviation data between 2015 and 2020[^7] : 
  
@@ -88,24 +91,24 @@ We can get a clear picture of just how rare an accident is by looking into the U
 ## Data Gathering Process
 
 For this experiment, we found that there weren't any available datasets to get the accident seating maps from.
+We decided that we would gather the information from the final reports of the accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident.
 
-We decided that we would gather the information from the final reports that are written as outcomes of all investigations into aircraft accidents. We also gathered data from Wikipedia after checking that the source was indeed the final report of the investigation into the accident. The final report is the result of the investigation conducted by an aviation safety board. It is an official document where the results of the investigation into the cause of the accident is reported along with many other informations pertinent to the analysis that the investigators conducted. 
+We examined aircraft accidents where there 3 or more deaths, and more than 30 people overall onboard, to be able to divide the aircraft into sections and study them. Of 597 accidents that happened from 1977 to 2019, we found 105 that met this criteria. Of these, we found seat injury maps for 48 of them. This was due to the kind of information contained in the final reports. 
 
-We examined aircraft accidents where there were more than 3 deaths, and more than 30 people overall onboard to be able to divide the aircraft into proportions and study them. Of 597 accidents that happened from 1977 to 2019, we found 111 that met this criteria. Of these, we found seat injury maps for 47 of them. This was due to the kind of information contained in the final reports. 
+The final reports don't always feature a seat injury map built in a way that allows us to conduct a statistical analysis on it. Sometimes, the map is not even present and the only information is a rough idea of the location of the survivors and deaths. This is an extract from the final report of eastern airlines flight 401 :
 
-The final reports don't always feature a seat injury map built in a way that allows us to conduct a ststistical analysis on it. Sometimes, the map is not even present and the only information is a rough idea of the location of the survivors and deaths. This is an extract from the final report of eastern airlines flight 401 :
+ - *"Most of the survivors were located in the vicinity of the cockpit area, the mid-cabin service area, the overwing area, and the empennage section; these sections were located at the far end of the wreckage path. In contrast, most fatalities were found in the center of the crash path. Crushing injuries to the chest were the predominant causes of death."*
 
-"Most of the survivors were located in the vicinity of the cockpit area, the mid-cabin service area, the overwing area, and the empennage section; these sections were located at the far end of the wreckage path. In contrast, most fatalities were found in the center of the crash path. Crushing injuries to the chest were the predominant causes of death."
+//aggiungere link 
 
-We know that 101 people died in this accident and that 75 survived, but we have no way of knowing how to assign a precise percentage to each section, so we had to discard this accident from our data sample. 
+We know that 101 people died in this accident and that 75 survived, but we can't assign a precise mortality rate to each section, so we had to discard this accident from our data sample. 
 
 In some cases, only the locations of the deaths were marked, thus making a statistical analysis impossible since the total number of passengers per section was unknown. 
 
-Whenever a full seat x injury map was featured in the report, we calculated by hand the total passenger counts. We intentionally left out the cabin crew from our totals, since this analysis is focused on passengers. 
-
+Whenever a full seat x injury map was featured in the report, we calculated by hand the total passenger counts. We intentionally left out the crew from our totals, since this analysis is focused on passengers. 
 We decided that to be able to get some insight on the safest part of the aircraft, we should not use single seats but rather chunks of the aircraft, as all aircraft are different and can't be compared seat by seat. Not knowing if dividing into thirds or halves, we inserted both these information in our dataset. 
 
-We collected the additional information about the accident details from the aviation safety network[^8] and from Wikipedia[^9]
+We collected the additional information about the accident details from the aviation safety network database[^8] and from Wikipedia[^9]
  
 # Data Description
 
@@ -119,18 +122,16 @@ str(accident_data)
 
 ## Data Points and Variables 
 
-The data consists of 47 observations (aircraft accidents) and 26 variables. They are the focus of our analysis.
+The data consists of 48 observations (aircraft accidents) and 26 variables. They are the focus of our analysis.
 
 We want to remark that the data consists only of aircraft accidents where there were at least 3 fatalities and more than 30 passengers onboard, because the final goal was to compare mortality rates. In this section we give more detail on the additional variables gathered for each accident 
 
-The variables consist of:
+The variables are:
 
 - **Airline & FlightNum** : identifier of the aircraft accident. Useful to retrieve more information about the accident if needed. 
 
 - **X variables** : these variables represent the number and the type of injury (minor-none / serious / fatal) in each section of the airplane (Each third and each half). 
 The format is the following : `X{section}.{part}.{type of injury}`, where section is 1,2,3 for the thirds and 1,2 for the halves, part is "third" or "half", and type of injury is "minor", "major" or "dead".
-
-- **DataOrigin** : source of the data, either Wikipedia (W) or directly from the final report (FR) or other sources (empty).
 
 - **PhaseOfFlight** : phase of flight when the accident happened, The possible values are "takeoff" or "landing", landing includes emergency landings.
 
@@ -196,7 +197,7 @@ accident_data <- within(accident_data, {
 
 ### Plotting
 
-The first step we can do is plotting some feature of the data to have a visual understanding of it. 
+The first step we can do is plotting some features of the data to have a visual understanding of it. 
 We do this to get some useful insights and also check for possible outliers or anomalies.
 
 ```{r simple boxplots}
@@ -210,19 +211,19 @@ with(accident_data, {
           main = "Mortality Rates by Section",
           ylab = "Mortality Rate",
           xlab = "Sections",
-          col = c("red", "red", "red", "green", "green"),
+          col = c("darkgreen", "darkgreen", "darkgreen", "green", "green"),
           cex.axis = 0.9)
 })
 ```
 
-Intestingly, there seems to be a general trend of lowering mortality rates the more rear the section is. 
+Intestingly, there seems to be a general trend in the mortality rates :  the more rear the section is, the lower the mortality rate. 
 This is seen in both the third and half divisions of the airplane.
 
 ### Distribution 
 
-Now we can try to test the kind of population distribution of the mortality rates, to see if they follow a normal distribution or not. This will help us choose the right statistical tests for our analysis.
-
-We will use the Shapiro-Wilk test for normality.
+Now we can try to find the kind of population distribution of the mortality rates is.
+This will help us choose the right statistical tests for our analysis.
+We test to see if the data follows a normal distribution with the Shapiro-Wilk test. 
 
 ```{r normality tests}
 # shapiro test for normality, p-value extrated and lableled
@@ -239,7 +240,8 @@ shapiro_results <- data.frame(
 shapiro_results
 ```
 
-All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality for all sections. This means that the mortality rates do not follow a normal distribution, let's try to plot a histogram for all of the sections to visualize an approximation of the distribution.
+All of the p-values are far below the standard threshold of 0.05, indicating that we can reject the null hypothesis of normality, for all sections. 
+Let's try to plot a histogram for all of the sections to visualize an approximation of the distribution.
 
 ```{r istrogram distribution third, fig.height=8, fig.width=8, echo=FALSE}
 par(mfrow = c(3, 2))
@@ -271,14 +273,14 @@ for( c in colums_half){
   hist(accident_data[[c]],
        main = paste("Histogram of", gsub("\\.", " ", c)),
        xlab = "Mortality Rate",
-       col = "orange",
+       col = "green",
        border = "black",
        breaks = 10)
 }
 ```
 
 It seems that there is no clear distribution pattern. 
-What we can see is that the data is more concentrated at both ends of the mortality rate values, especially for the front third section. Seams like in most accidents, either most people die or most people survive, with few accidents in the middle ground.
+What we can see is that the data is more concentrated at both ends of the mortality rate values, especially for the front third section. It seams like in most accidents, either most people die or most people survive, with few accidents in the middle ground.
  
 ## Correlation between sections
 
@@ -329,16 +331,20 @@ corrplot(corr_res, method = "ellipse",
          type = "upper")
 ```
 
-As we can see from both the scatterplot matrix and the correlation plot, there is a strong positive correlation between the mortality rates of the different sections and the total mortality rate. Also there are no evident asymmetries on the color distribution.
-We notice that the correlation is weakest between the front third and the rear third: in fact, the more 2 sections are distant physically, the less correlated they are in this data; also similar distance leads to similar correlation values:
+// SEPARATE THIRDS FROM HALVES 
 
-The correlation with the total mortality rate is very high for all sections, indicating that when the total mortality rate is high, all sections tend to have high mortality rates, which is expected.
+As we can see from both the scatterplot matrix and the correlation plot, there is a strong positive correlation between the mortality rates of the different sections and the total mortality rate. Also there are no evident asymmetries on the color distribution.
+The correlation with the total mortality rate is very high for all sections, indicating that when the total mortality rate is high, all sections tend to have high mortality rates, which is expected, as the increase of mortality rate in a section also leads to the increase of the total mortality rate.
+
+We notice that the correlation is weakest between the front third and the rear third: in fact, the more 2 sections are distant physically, the less correlated they are in this data; also similar distance leads to similar correlation values. This is a sign that probably there is "a safer zone", since it looks like the mortality rates for distant sections are not as correlated as they are for closer sections. 
+
+This, and the decreasing trend in the boxplots seems like the reason why most articles halted their analysis, since they thought that a difference in mortality rates and correlation meant a significant difference in survivability.
+
+We want to base our conclusion on statistical evidence, so we now conduct further statistical analysis to determine if these results are actually significant.
 
 ## Statistical Analysis of differences in mortality rates between sections
 
-Now that we have a better understanding of the data, we can proceed with the statistical analysis to test if there are significant differences in mortality rates between the different sections of the airplane. Also, we will try to see if there is some correlation between the mortality rates and the other variables in the dataset.
-
-Since the distribution of the mortality rates is not normal, we will not use tests that assume normality, like t-tests or ANOVA.
+Since the distribution of the mortality rates is not normal, we will not use tests that assume normality, like t or ANOVA tests.
 We will instead use the Kruskal-Wallis test, which is a non-parametric test to compare the distribution of two or more groups. The null hypothesis of the Kruskal-Wallis test is that all the populations have the same distribution.
 
 ```{r analysis of population differences}
@@ -364,12 +370,15 @@ kruskal_result_half <- kruskal.test(MortalityRateHalf ~ SectionHalf, data = mort
 kruskal_result_half
 ```
 
-The Kruskal-Wallis tests returned p-values of 0.1811 (for thirds) and 0.371 (for halves). In both cases, the p-value is above the standard significance level of 0.05. Therefore, we cannot reject the null hypothesis. Despite the visual trends observed in the boxplots, our statistical analysis indicates that there is no significant difference in mortality rates between the different sections of the aircraft, no matter if divided into thirds or halves. The location of the seat (Front, Middle, or Rear) does not appear to be a statistically determining factor for survivability in this dataset.
+The Kruskal-Wallis tests returned p-values of 0.1811 (for thirds) and 0.371 (for halves). In both cases, the p-value is above the standard significance level of 0.05. Therefore, we cannot reject the null hypothesis : despite the visual trends observed in the boxplots, our statistical analysis indicates that there is no significant difference in mortality rates between the different sections of the aircraft, no matter if is divided into thirds or halves. 
 The trend that we observed in the boxplots could be caused just by random variation in the data, and not by a real effect of the seating location on mortality rates. There could also be a problem of low statistical power due to the small sample size and/or the high variability of the data observed in the histograms.
 
-## Modeling the mortality rates
+//Open questions : can we calculate the power? 
 
-Now we will try to fit a model to possibly discover the effect of the other variables on the mortality rates of the different sections. The focus is not specifically on prediction, but rather on trying to find a significant difference between the sections, in matter of correlation with the other variables. Now the questions are:
+## Modelling the mortality rates
+
+Now we will try to fit a model to possibly discover the effect of the other variables on the mortality rates of the different sections. The focus is not specifically on prediction, but rather on trying to find a significant difference between the sections in light of their correlation with the additional variables. 
+Now the questions are:
 
 - Are there variables that significantly affect the mortality rate?
 
@@ -385,7 +394,7 @@ To account for this, we will use the quasibinomial family, which is a more flexi
 The standard binomial model assumes that every observation is independent and it assumes a relationship between the mean and the variance. For a probability p and n trials, the variance is expected to be:
 $$Var(Y)=n \cdot p(1-p)$$
 
-In aircraft accidents,mortality data is clustered. Often, either everyone survives or everyone dies. This causes the observed variance in the data to be much higher than what the binomial formula predicts. This phenomenon is called **Overdispersion**. If we ignored this, our model would be overconfident (p-values artificially low), meaning we will find "significance" where there is none.
+In aircraft accidents, mortality data is clustered. Often, either everyone survives or everyone dies. This causes the observed variance in the data to be much higher than what the binomial formula predicts. This phenomenon is called **Overdispersion**. If we ignored this, our model would be overconfident (p-values artificially low), meaning we will find "significance" where there is none.
 
 The quasibinomial model does not define a specific probability distribution. Instead, it defines a relationship between the mean and the variance using a Dispersion Parameter $\phi$.
 
@@ -394,11 +403,14 @@ $$Var(Y)=\phi \cdot n \cdot p(1-p)$$
 
 - If \(\phi=1\): It behaves exactly like a standard Binomial model.
 
-- If \(\phi>1\): It indicates overdispersion. The model "penalizes" our results by scaling up the standard errors, and thus lowers the pvalues, by a factor of \(\phi\).
+- If \(\phi>1\): It indicates overdispersion. The model "penalizes" our results by scaling up the standard errors, and thus lowers the pvalues, by a factor of $\sqrt\phi$.
 
 The estimated coefficients remain the same as a standard logistic regression, but the standard errors are larger, resulting in wider confidence intervals and more conservative p-values.
 
 ### GLM models and results
+
+We fit GLMs using the mortality rate as response and our additional variables as covariates, one for each section. We also modeled the total mortality rate, to see if there are variables that affect the overall survivability of the accident, regardless of seating location.
+
 ```{r test glm}
 
 predictors <- ~ PhaseOfFlight + Time + Place + HasFire + Environment + 
@@ -427,8 +439,6 @@ glm_total <- glm(update( predictors, cbind(X1.third.dead + X2.third.dead + X3.th
                    data = accident_data)
 ```
 
-We also modeled the total mortality rate, to see if there are variables that affect the overall survivability of the accident, regardless of seating location.
-
 ```{r summay test}
 summary(glm_third_1)
 summary(glm_third_2)
@@ -436,15 +446,16 @@ summary(glm_third_3)
 summary(glm_total)
 ```
 
-The result are promising, but we first need to check if our assumptions on family choice were correct. If we check th dispersion parameter calculated for each model, we can see that it is significantly higher than 1 in all cases (front : 17.31; middle: 27.59; rear: 36.18; total: 62.06), confirming our worries about overdispersion.
+We first need to check wether our assumptions on family choice were correct. To do this, we check the dispersion parameter calculated for each model. We can see that it is significantly higher than 1 in all cases (front : 17.31; middle: 27.59; rear: 36.18; total: 62.06), confirming that overdispersion is present, and needs to be corrected. Therefore we can say that our choice of family was apt.
 
-We have some statistically significant results in some of the models, let's analize them more in detail by section:
+Next, we analize the statistically significant results present in the models in detail:
 
-- **Front Third** : Here the variables "HasFire" and "RestraintIntact" are statistically significant (p-value < 0.05). In particular, "no-fire" and "RestraintIntact = 1" are associated with negative and significant coefficients. This suggests that the absence of fire and the presence of intact restraints are associated with lower mortality rates in the front third of the aircraft.
+- **Front Third** : The variables "HasFire" and "RestraintIntact" are statistically significant (p-values : 0.0482, 0.0441). In particular, "HasFire = no-fire" and "RestraintIntact = 1" are associated with negative coefficients. This suggests that the absence of fire and the presence of intact restraints are associated with lower mortality rates in the front third of the aircraft.
 
-- **Middle Third** : The variable "EnergyAbsorption" is statistically significant (p-value = 0.0207). The "nogear" level has a positive coefficient,meaning that the absence of energy absorption mechanisms (like landing gear) is associated with higher mortality rates in the middle third. Interesingly, "HasFire" is not significant here and "RestraintIntact" is only marginally significant (p-value = 0.0908). This is different from the front third, and is very interesting.
+- **Middle Third** : The variable "EnergyAbsorption" is statistically significant (p-value = 0.0207). The "nogear" level has a positive coefficient, meaning that the absence of energy absorption mechanisms is associated with higher mortality rates in the middle third. 
+Interesingly, "HasFire" is not significant here and "RestraintIntact" is only marginally significant (p-value = 0.0908). This is different from the front third.
 
-- **Rear Third** : No variables are statistically significant at the 0.05 level, but "EnergyAbsorption" is marginally significant (p-value = 0.0738) with a positive coefficient for "nogear". This suggests a similar trend as in the middle third, but with less statistical confidence. Seems like the rear third is less affected by the other variables overall, likely due to the fact that none of the variable in the dataset directly relate to rear third survivability, unlike the front and middle thirds.
+- **Rear Third** : No variables are statistically significant at the 0.05 level, but "EnergyAbsorption" is marginally significant (p-value = 0.0738) with a positive coefficient for "nogear". This suggests a similar trend as in the middle third, but with less statistical confidence. It seems that the rear third is less affected by the other variables overall, this might be due to the fact that none of the variables in the dataset directly relate to rear third's survivability, unlike the front and middle thirds.
 
 **Total Mortality Rate** : "EnergyAbsorption" is statistically significant (p-value = 0.0295) with a positive coefficient for "nogear". This means that the absence of a clean, energy-absorbing landing, is highly correlated with higher overall mortality rates. 
 "HasFire" and "RestraintIntact" are marginally significant (p-values = 0.0989 and 0.0933 respectively), suggesting that they may have some effect on overall survivability, but the evidence is not strong enough to be conclusive.
