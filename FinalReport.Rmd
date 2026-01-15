@@ -430,61 +430,101 @@ Now we will try to fit a model to possibly discover the effect of the other vari
 We will try to fit a Generalized Linear Model (GLM) with binomial family, since the mortality rate is a proportion (number of deaths / total number of passengers). 
 Unfortunately, because of the nature of the data, the assumptions of the binomial distribution are not met, since the passenger's deaths are not independent events. 
 
-To account for this, we will use the quasibinomial family, which is a more flexible version of the binomial family that allows for overdispersion and corrects the standard errors and p-values accordingly.  
+To account for this, we will use the quasibinomial family, which is a more flexible version of the binomial family that allows for overdispersion and corrects the standard errors and p-values accordingly.
 
+### Technical Note: The Quasibinomial Family
+
+The standard binomial model assumes that every observation is independent and it assumes a relationship between the mean and the variance. For a probability p and n trials, the variance is expected to be:
+$$Var(Y)=n \cdot p(1-p)$$
+
+In aircraft accidents,mortality data is clustered. Often, either everyone survives or everyone dies. This causes the observed variance in the data to be much higher than what the binomial formula predicts. This phenomenon is called **Overdispersion**. If we ignored this, our model would be overconfident (p-values artificially low), meaning we will find "significance" where there is none.
+
+The quasibinomial model does not define a specific probability distribution. Instead, it defines a relationship between the mean and the variance using a Dispersion Parameter $\phi$.
+
+The new variance formula becomes:
+$$Var(Y)=\phi \cdot n \cdot p(1-p)$$
+
+- If \(\phi=1\): It behaves exactly like a standard Binomial model.
+
+- If \(\phi>1\): It indicates overdispersion. The model "penalizes" our results by scaling up the standard errors, and thus lowers the pvalues, by a factor of \(\phi\).
+
+The estimated coefficients remain the same as a standard logistic regression, but the standard errors are larger, resulting in wider confidence intervals and more conservative p-values.
+
+### GLM models and results
 ```{r test glm}
-### test glm with binomial family to see the effect of other variables on mortality rate for each section
+glm_third_1 <- glm(cbind(X1.third.dead, X1.third.total - X1.third.dead) ~ 
+                      PhaseOfFlight + 
+                     Time + 
+                     Place + 
+                     HasFire + 
+                     Environment + 
+                     EnergyAbsorption + 
+                     CrushedFuselage + 
+                     RestraintIntact, 
+                   family = quasibinomial(link = "logit"),
+                   data = accident_data)
 
-## also print the varius confidence intervals for the coefficients, and trasform them into odds ratios
-glm_third_1 <- glm(cbind(accident_data$X1.third.dead, accident_data$X1.third.total - accident_data$X1.third.dead) ~ 
-                     accident_data$PhaseOfFlight + 
-                     accident_data$Time + 
-                     accident_data$Place + 
-                     accident_data$HasFire + 
-                     accident_data$Environment + 
-                     accident_data$EnergyAbsorption + 
-                     accident_data$CrushedFuselage + 
-                     accident_data$RestraintIntact, 
-                   family = quasibinomial(link = "logit"))
+glm_third_2 <- glm(cbind(X2.third.dead, X2.third.total - X2.third.dead) ~ 
+                     PhaseOfFlight + 
+                     Time + 
+                     Place + 
+                     HasFire + 
+                     Environment + 
+                     EnergyAbsorption + 
+                     CrushedFuselage + 
+                     RestraintIntact, 
+                   family = quasibinomial(link = "logit"),
+                   data = accident_data)
 
-glm_third_2 <- glm(cbind(accident_data$X2.third.dead, accident_data$X2.third.total - accident_data$X2.third.dead) ~ 
-                     accident_data$PhaseOfFlight + 
-                     accident_data$Time + 
-                     accident_data$Place + 
-                     accident_data$HasFire + 
-                     accident_data$Environment + 
-                     accident_data$EnergyAbsorption + 
-                     accident_data$CrushedFuselage + 
-                     accident_data$RestraintIntact, 
-                   family = quasibinomial(link = "logit"))
+glm_third_3 <- glm(cbind(X3.third.dead, X3.third.total - X3.third.dead) ~ 
+                     PhaseOfFlight + 
+                     Time + 
+                     Place + 
+                     HasFire + 
+                     Environment + 
+                     EnergyAbsorption + 
+                     CrushedFuselage + 
+                     RestraintIntact, 
+                   family = quasibinomial(link = "logit"),
+                   data = accident_data)
 
-glm_third_3 <- glm(cbind(accident_data$X3.third.dead, accident_data$X3.third.total - accident_data$X3.third.dead) ~ 
-                     accident_data$PhaseOfFlight + 
-                     accident_data$Time + 
-                     accident_data$Place + 
-                     accident_data$HasFire + 
-                     accident_data$Environment + 
-                     accident_data$EnergyAbsorption + 
-                     accident_data$CrushedFuselage + 
-                     accident_data$RestraintIntact, 
-                   family = quasibinomial(link = "logit"))
-
-# now try to model the total mortality rate
-
-glm_total <- glm(cbind(accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead, 
-                       accident_data$X1.third.total + accident_data$X2.third.total + accident_data$X3.third.total - 
-                         (accident_data$X1.third.dead + accident_data$X2.third.dead + accident_data$X3.third.dead)) ~ 
-                   accident_data$PhaseOfFlight + 
-                   accident_data$Time + 
-                   accident_data$Place + 
-                   accident_data$HasFire + 
-                   accident_data$Environment + 
-                   accident_data$EnergyAbsorption + 
-                   accident_data$CrushedFuselage + 
-                   accident_data$RestraintIntact, 
-                 family = quasibinomial(link = "logit"))
+glm_total <- glm(cbind(X1.third.dead + X2.third.dead + X3.third.dead, 
+                       X1.third.total + X2.third.total + X3.third.total - 
+                         (X1.third.dead + X2.third.dead + X3.third.dead)) ~ 
+                   PhaseOfFlight + 
+                   Time + 
+                   Place + 
+                   HasFire + 
+                   Environment + 
+                   EnergyAbsorption + 
+                   CrushedFuselage + 
+                   RestraintIntact, 
+                 family = quasibinomial(link = "logit"),
+                 data = accident_data)
 
 ```
+
+We also modeled the total mortality rate, to see if there are variables that affect the overall survivability of the accident, regardless of seating location.
+
+```{r summay test}
+summary(glm_third_1)
+summary(glm_third_2)
+summary(glm_third_3)
+summary(glm_total)
+```
+
+The result are promising, but we first need to check if our assumptions on family choice were correct. If we check th dispersion parameter calculated for each model, we can see that it is significantly higher than 1 in all cases (front : 17.31; middle: 27.59; rear: 36.18; total: 62.06), confirming our worries about overdispersion.
+
+We have some statistically significant results in some of the models, let's analize them more in detail by section:
+
+- **Front Third** : Here the variables "HasFire" and "RestraintIntact" are statistically significant (p-value < 0.05). In particular, "no-fire" and "RestraintIntact = 1" are associated with negative and significant coefficients. This suggests that the absence of fire and the presence of intact restraints are associated with lower mortality rates in the front third of the aircraft.
+
+- **Middle Third** : The variable "EnergyAbsorption" is statistically significant (p-value = 0.0207). The "nogear" level has a positive coefficient,meaning that the absence of energy absorption mechanisms (like landing gear) is associated with higher mortality rates in the middle third. Interesingly, "HasFire" is not significant here and "RestraintIntact" is only marginally significant (p-value = 0.0908). This is different from the front third, and is very interesting.
+
+- **Rear Third** : No variables are statistically significant at the 0.05 level, but "EnergyAbsorption" is marginally significant (p-value = 0.0738) with a positive coefficient for "nogear". This suggests a similar trend as in the middle third, but with less statistical confidence. Seems like the rear third is less affected by the other variables overall, likely due to the fact that none of the variable in the dataset directly relate to rear third survivability, unlike the front and middle thirds.
+
+**Total Mortality Rate** : "EnergyAbsorption" is statistically significant (p-value = 0.0295) with a positive coefficient for "nogear". This means that the absence of a clean, energy-absorbing landing, is highly correlated with higher overall mortality rates. 
+"HasFire" and "RestraintIntact" are marginally significant (p-values = 0.0989 and 0.0933 respectively), suggesting that they may have some effect on overall survivability, but the evidence is not strong enough to be conclusive.
 
 
 
@@ -523,6 +563,25 @@ strength_total  <- calc_strength(glm_total,   "Total")
 # Combine and View
 model_power <- rbind(strength_front, strength_middle, strength_rear, strength_total)
 print(model_power)
+
+
+if(!require(car)) install.packages("car")
+library(car)
+
+# 2. Run Type II ANOVA on your models
+# We use test="F" because of the quasibinomial family (estimated dispersion)
+
+cat("--- Type II ANOVA: Front Section ---\n")
+Anova(glm_third_1, type = "II", test = "F")
+
+cat("\n--- Type II ANOVA: Middle Section ---\n")
+Anova(glm_third_2, type = "II", test = "F")
+
+cat("\n--- Type II ANOVA: Rear Section ---\n")
+Anova(glm_third_3, type = "II", test = "F")
+
+cat("\n--- Type II ANOVA: Total Aircraft ---\n")
+Anova(glm_total, type = "II", test = "F")
 ```
 
 
